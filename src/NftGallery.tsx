@@ -5,37 +5,54 @@ export interface NftGalleryProps {
   ownerAddress: string;
 }
 
-export const NftGallery: React.FC<{ ownerAddress: string }> = ({
-  ownerAddress,
-}) => {
-  const [assets, setAssets] = useState([]);
+const OPENSEA_API_OFFSET = 50;
 
-  const fetchNftProfile = async () => {
+export const NftGallery: React.FC<NftGalleryProps> = ({ ownerAddress }) => {
+  const [assets, setAssets] = useState([] as any[]);
+  const [currentOffset, setCurrentOffset] = useState(0);
+  const [canLoadMore, setCanLoadMore] = useState(false);
+
+  const fetchAssets = async (owner: string, offset = 0) => {
     try {
       const res = await fetch(
-        `https://api.opensea.io/api/v1/assets?exclude_currencies=true&owner=${ownerAddress}&limit=50&offset=0`
+        `https://api.opensea.io/api/v1/assets?exclude_currencies=true&owner=${owner}&limit=50&offset=${offset}`
       );
       const { assets } = await res.json();
-      setAssets(assets);
+      return assets;
     } catch (error) {
-      console.error('fetchNftProfile failed:', error);
+      console.error('fetchAssets failed:', error);
     }
   };
 
-  // TODO: iterate with +50 offset until we no longer receive full response (i.e. last items sent).
+  const loadAssets = async (owner: string, offset: number) => {
+    const assets = await fetchAssets(owner, offset);
+    console.log('Got %s assets', assets.length);
+    setAssets((prevAssets) => [...prevAssets, ...assets]);
+    setCanLoadMore(assets.length === OPENSEA_API_OFFSET);
+  };
+
   useEffect(() => {
-    fetchNftProfile();
-  }, [ownerAddress]);
+    loadAssets(ownerAddress, currentOffset);
+  }, [ownerAddress, currentOffset]);
 
   return (
     <div style={styles.grid as any}>
-      {assets.map((asset: any) => (
-        <a key={asset.name} href="#" style={styles.card as any}>
+      {assets.map((asset: any, i) => (
+        <a key={asset.name + i} href="#" style={styles.card as any}>
           <h2>{asset.name}</h2>
           {/* <p>{asset.description}</p> */}
           <img src={asset.image_preview_url} alt="" />
         </a>
       ))}
+      {canLoadMore && (
+        <button
+          onClick={() => {
+            setCurrentOffset((prevOffset) => prevOffset + OPENSEA_API_OFFSET);
+          }}
+        >
+          Load more
+        </button>
+      )}
     </div>
   );
 };
