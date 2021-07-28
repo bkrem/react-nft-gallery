@@ -70,6 +70,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.4.0",
-    "@emotion/styled": "^11.3.0"
+    "@emotion/styled": "^11.3.0",
+    "react-photo-gallery": "^8.0.0"
   }
 }

@@ -1,41 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import Gallery, { RenderImageProps } from 'react-photo-gallery';
 
-const Grid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  margin-top: 3rem;
+const GalleryItemWrapper = styled.article`
+  position: relative;
+  background-color: papayawhip;
 `;
 
-const AssetWrapper = styled.article`
-  @media (max-width: 1500px) {
-    /* height: calc(((100vw - 403px) - 90px) / 4); */
-    width: calc(((100vw - 403px) - 90px) / 4);
-  }
-  @media (max-width: 1300px) {
-    /* height: calc(((100vw - 403px) - 60px) / 3); */
-    width: calc(((100vw - 403px) - 60px) / 3);
-  }
-  @media (max-width: 1000px) {
-    /* height: calc(((100vw - 403px) - 30px) / 2); */
-    width: calc(((100vw - 403px) - 30px) / 2);
-  }
-  @media (max-width: 850px) {
-    margin: 9.5px;
-    /* height: calc((100vw - 86px) / 3); */
-    width: calc((100vw - 86px) / 3);
-  }
-  @media (max-width: 650px) {
-    /* height: calc(50vw - 33.5px); */
-    width: calc(50vw - 33.5px);
-  }
-  @media (max-width: 480px) {
-    /* height: calc(50vw - 26.5px); */
-    margin: 7.5px;
-    width: calc(50vw - 26.5px);
-  }
+const DescriptionOverlay = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
 `;
 
 const Img = styled.img`
@@ -50,6 +28,21 @@ export interface NftGalleryProps {
 }
 
 const OPENSEA_API_OFFSET = 50;
+
+const ImageComponent: React.FC<
+  RenderImageProps & { photo: { asset: any } }
+> = ({ photo }) => {
+  const { src, asset } = photo;
+  return (
+    <GalleryItemWrapper style={{ height: photo.height, width: photo.width }}>
+      <Img src={src} alt={asset.name} loading="lazy" />
+      <DescriptionOverlay>
+        <p>Name: {asset.name}</p>
+        <p>Collection: {asset.collection.name}</p>
+      </DescriptionOverlay>
+    </GalleryItemWrapper>
+  );
+};
 
 export const NftGallery: React.FC<NftGalleryProps> = ({
   ownerAddress = '',
@@ -86,10 +79,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     loadAssets(ownerAddress, currentOffset);
   }, [ownerAddress, currentOffset]);
 
+  /* TODO: Handle rendering of .mp4 previews */
   return (
     <>
-      <Grid>
-        {/* TODO: Handle rendering of .mp4 previews */}
+      {/* <Grid>
         {assets.map((asset: any) => (
           <AssetWrapper
             style={{ backgroundColor: 'papayawhip' }}
@@ -108,7 +101,17 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
             </div>
           </AssetWrapper>
         ))}
-      </Grid>
+      </Grid> */}
+      <Gallery
+        photos={assets.map((asset: any) => ({
+          asset,
+          src: asset.image_preview_url,
+          width: 1,
+          height: 1,
+        }))}
+        // @ts-ignore
+        renderImage={ImageComponent}
+      />
       {canLoadMore && (
         <button
           onClick={() => {
