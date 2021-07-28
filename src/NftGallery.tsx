@@ -73,10 +73,15 @@ export const NftGallery: React.FC<NftGalleryProps> = ({ ownerAddress }) => {
   };
 
   const loadAssets = async (owner: string, offset: number) => {
-    const assets = await fetchAssets(owner, offset);
-    console.log('Got %s assets', assets.length);
-    setAssets((prevAssets) => [...prevAssets, ...assets]);
-    setCanLoadMore(assets.length === OPENSEA_API_OFFSET);
+    const rawAssets = await fetchAssets(owner, offset);
+    const displayableAssets = rawAssets.filter((asset: any) =>
+      Boolean(asset.image_preview_url)
+    );
+    console.log('Got %s assets', rawAssets.length);
+    console.log('%s displayable assets', displayableAssets.length);
+
+    setAssets((prevAssets) => [...prevAssets, ...displayableAssets]);
+    setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
   };
 
   useEffect(() => {
@@ -86,12 +91,17 @@ export const NftGallery: React.FC<NftGalleryProps> = ({ ownerAddress }) => {
   return (
     <>
       <Grid>
-        {assets.map((asset: any, i) => (
-          <CardWrapper key={asset.name + i}>
+        {/* TODO: Handle rendering of .mp4 previews */}
+        {assets.map((asset: any) => (
+          <CardWrapper key={asset.id}>
             {/* <a key={asset.name + i} href="#" style={styles.card as any}> */}
             {/* <h2>{asset.name}</h2> */}
             {/* <p>{asset.description}</p> */}
-            <Img src={asset.image_preview_url} alt="" />
+            <Img
+              src={asset.image_preview_url}
+              alt={asset.name}
+              loading="lazy"
+            />
             {/* </a> */}
           </CardWrapper>
         ))}
