@@ -1,4 +1,52 @@
 import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled';
+
+const Grid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem;
+`;
+
+const CardWrapper = styled.div`
+  height: calc(50vw - 26.5px);
+  margin: 7.5px;
+  width: calc(50vw - 26.5px);
+
+  @media (max-width: 1500px) {
+    height: calc(((100vw - 403px) - 90px) / 4);
+    width: calc(((100vw - 403px) - 90px) / 4);
+  }
+  @media (max-width: 1300px) {
+    height: calc(((100vw - 403px) - 60px) / 3);
+    width: calc(((100vw - 403px) - 60px) / 3);
+  }
+  @media (max-width: 1000px) {
+    height: calc(((100vw - 403px) - 30px) / 2);
+    width: calc(((100vw - 403px) - 30px) / 2);
+  }
+  @media (max-width: 850px) {
+    margin: 9.5px;
+    height: calc((100vw - 86px) / 3);
+    width: calc((100vw - 86px) / 3);
+  }
+  @media (max-width: 650px) {
+    height: calc(50vw - 33.5px);
+    width: calc(50vw - 33.5px);
+  }
+  @media (max-width: 480px) {
+    height: calc(50vw - 26.5px);
+    margin: 7.5px;
+    width: calc(50vw - 26.5px);
+  }
+`;
+
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
 
 export interface NftGalleryProps {
   /** Ethereum address for which the gallery should contain associated NFTs. */
@@ -36,14 +84,18 @@ export const NftGallery: React.FC<NftGalleryProps> = ({ ownerAddress }) => {
   }, [ownerAddress, currentOffset]);
 
   return (
-    <div style={styles.grid as any}>
-      {assets.map((asset: any, i) => (
-        <a key={asset.name + i} href="#" style={styles.card as any}>
-          <h2>{asset.name}</h2>
-          {/* <p>{asset.description}</p> */}
-          <img src={asset.image_preview_url} alt="" />
-        </a>
-      ))}
+    <>
+      <Grid>
+        {assets.map((asset: any, i) => (
+          <CardWrapper key={asset.name + i}>
+            {/* <a key={asset.name + i} href="#" style={styles.card as any}> */}
+            {/* <h2>{asset.name}</h2> */}
+            {/* <p>{asset.description}</p> */}
+            <Img src={asset.image_preview_url} alt="" />
+            {/* </a> */}
+          </CardWrapper>
+        ))}
+      </Grid>
       {canLoadMore && (
         <button
           onClick={() => {
@@ -53,29 +105,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({ ownerAddress }) => {
           Load more
         </button>
       )}
-    </div>
+    </>
   );
-};
-
-const styles = {
-  grid: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    maxWidth: '800px',
-    marginTop: '3rem',
-  },
-
-  card: {
-    margin: '1rem',
-    padding: '1.5rem',
-    textAlign: 'left',
-    color: 'inherit',
-    textDecoration: 'none',
-    border: '1px solid #eaeaea',
-    borderRadius: '10px',
-    transition: 'color 0.15s ease, border-color 0.15s ease',
-    width: '45%',
-  },
 };
