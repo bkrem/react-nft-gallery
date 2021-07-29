@@ -4,22 +4,42 @@ import Gallery, { RenderImageProps } from 'react-photo-gallery';
 
 const GalleryItemWrapper = styled.article`
   position: relative;
-  background-color: papayawhip;
+  margin: 1rem;
+  border-radius: 1rem;
+
+  background-color: green;
 `;
 
 const DescriptionOverlay = styled.div`
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  height: 100%;
+  border-radius: 1rem;
   color: white;
+  text-align: center;
+  background-color: transparent;
+  opacity: 0;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 1;
+  }
+`;
+
+const Description = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const Img = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 1rem;
 `;
 
 export interface NftGalleryProps {
@@ -34,11 +54,16 @@ const ImageComponent: React.FC<
 > = ({ photo }) => {
   const { src, asset } = photo;
   return (
-    <GalleryItemWrapper style={{ height: photo.height, width: photo.width }}>
+    <GalleryItemWrapper
+      key={asset.id}
+      style={{ height: photo.height, width: photo.width }}
+    >
       <Img src={src} alt={asset.name} loading="lazy" />
       <DescriptionOverlay>
-        <p>Name: {asset.name}</p>
-        <p>Collection: {asset.collection.name}</p>
+        <Description>
+          <h1>{asset.name}</h1>
+          <h2>Collection: {asset.collection.name}</h2>
+        </Description>
       </DescriptionOverlay>
     </GalleryItemWrapper>
   );
@@ -81,27 +106,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   /* TODO: Handle rendering of .mp4 previews */
   return (
-    <>
-      {/* <Grid>
-        {assets.map((asset: any) => (
-          <AssetWrapper
-            style={{ backgroundColor: 'papayawhip' }}
-            key={asset.id}
-          >
-            <div>
-              <Img
-                src={asset.image_preview_url}
-                alt={asset.name}
-                loading="lazy"
-              />
-              <div>
-                <p>Name: {asset.name}</p>
-                <p>Collection: {asset.collection.name}</p>
-              </div>
-            </div>
-          </AssetWrapper>
-        ))}
-      </Grid> */}
+    <div style={{ backgroundColor: 'papayawhip' }}>
       <Gallery
         photos={assets.map((asset: any) => ({
           asset,
@@ -121,6 +126,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
           Load more
         </button>
       )}
-    </>
+    </div>
   );
 };
