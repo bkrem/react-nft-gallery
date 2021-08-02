@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import Gallery, { RenderImageProps } from 'react-photo-gallery';
 
-const GalleryItemWrapper = styled.article`
-  position: relative;
-  margin: 1rem;
-  border-radius: 1rem;
-
-  background-color: green;
-`;
+import './index.css';
 
 const DescriptionOverlay = styled.div`
   position: absolute;
@@ -49,15 +42,12 @@ export interface NftGalleryProps {
 
 const OPENSEA_API_OFFSET = 50;
 
-const ImageComponent: React.FC<
-  RenderImageProps & { photo: { asset: any } }
-> = ({ photo }) => {
+const ImageComponent: React.FC<{ photo: { asset: any; src: any } }> = ({
+  photo,
+}) => {
   const { src, asset } = photo;
   return (
-    <GalleryItemWrapper
-      key={asset.id}
-      style={{ height: photo.height, width: photo.width }}
-    >
+    <article className="relative rounded-2xl" key={asset.id}>
       <Img src={src} alt={asset.name} loading="lazy" />
       <DescriptionOverlay>
         <Description>
@@ -65,7 +55,7 @@ const ImageComponent: React.FC<
           <h2>Collection: {asset.collection.name}</h2>
         </Description>
       </DescriptionOverlay>
-    </GalleryItemWrapper>
+    </article>
   );
 };
 
@@ -106,25 +96,29 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   /* TODO: Handle rendering of .mp4 previews */
   return (
-    <div style={{ backgroundColor: 'papayawhip' }}>
-      <Gallery
-        photos={assets.map((asset: any) => ({
-          asset,
-          src: asset.image_preview_url,
-          width: 1,
-          height: 1,
-        }))}
-        // @ts-ignore
-        renderImage={ImageComponent}
-      />
+    // TODO: remove debug bg
+    <div className="bg-yellow-100">
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {assets.map((asset: any) => (
+          <ImageComponent
+            photo={{
+              asset,
+              src: asset.image_preview_url,
+            }}
+          />
+        ))}
+      </div>
       {canLoadMore && (
-        <button
-          onClick={() => {
-            setCurrentOffset((prevOffset) => prevOffset + OPENSEA_API_OFFSET);
-          }}
-        >
-          Load more
-        </button>
+        <div className="flex justify-center">
+          <button
+            className="p-4"
+            onClick={() => {
+              setCurrentOffset((prevOffset) => prevOffset + OPENSEA_API_OFFSET);
+            }}
+          >
+            Load more
+          </button>
+        </div>
       )}
     </div>
   );
