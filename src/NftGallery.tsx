@@ -51,49 +51,58 @@ const OPENSEA_API_OFFSET = 50;
 //   );
 // };
 
-const ImageWithAttributes: React.FC<{ asset: any }> = ({ asset }) => {
+const ImageWithAttributes: React.FC<{
+  asset: any;
+  metadataIsVisible: NftGalleryProps['metadataIsVisible'];
+}> = ({ asset, metadataIsVisible }) => {
   return (
     <article className="rounded-2xl bg-white dark:bg-gray-800">
       <div style={{ height: '20rem' }}>
         <Img src={asset.image_preview_url} alt={asset.name} loading="lazy" />
       </div>
-      <div className="p-4">
-        <div className="break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200">
-          {asset.name}
-        </div>
-        <hr className="mx-4 border-gray-100 dark:border-gray-800" />
-        <div className="flex items-center">
-          {asset.collection.image_url && (
-            <img
-              src={asset.collection.image_url}
-              alt={asset.collection.name}
-              className="rounded-full mr-2 w-8 h-8"
-            />
-          )}
-          <div className="text-sm font-semibold truncate dark:text-gray-200">
-            {asset.collection.name}
+      {metadataIsVisible && (
+        <div data-test-id="metadata-section" className="p-4">
+          <div className="break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200">
+            {asset.name}
+          </div>
+          <hr className="mx-4 border-gray-100 dark:border-gray-800" />
+          <div className="flex items-center">
+            {asset.collection.image_url && (
+              <img
+                src={asset.collection.image_url}
+                alt={asset.collection.name}
+                className="rounded-full mr-2 w-8 h-8"
+              />
+            )}
+            <div className="text-sm font-semibold truncate dark:text-gray-200">
+              {asset.collection.name}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </article>
   );
 };
 
-// TODO: add `metadataIsVisible`
 export interface NftGalleryProps {
   /**
    * Ethereum address for which the gallery should contain associated NFTs.
    */
   ownerAddress: string;
   /**
-   * Sets whether the gallery is displayed in dark mode.
+   * Display gallery in dark mode.
    */
   darkMode?: boolean;
+  /**
+   * Display asset metadata.
+   */
+  metadataIsVisible?: boolean;
 }
 
 export const NftGallery: React.FC<NftGalleryProps> = ({
   ownerAddress = '',
   darkMode = true,
+  metadataIsVisible = true,
 }) => {
   const [assets, setAssets] = useState([] as any[]);
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -135,7 +144,11 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       <div className="bg-yellow-100 dark:bg-gray-900">
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {assets.map((asset: any) => (
-            <ImageWithAttributes key={asset.id} asset={asset} />
+            <ImageWithAttributes
+              key={asset.id}
+              asset={asset}
+              metadataIsVisible={metadataIsVisible}
+            />
           ))}
         </div>
         {canLoadMore && (
