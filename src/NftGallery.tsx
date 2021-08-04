@@ -51,14 +51,20 @@ const ImageWithAttributes: React.FC<{
   return (
     <article className="rounded-2xl bg-white dark:bg-gray-800">
       <div style={{ height: '20rem' }}>
-        <img
-          className={`w-full h-full object-cover ${
-            metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
-          }`}
-          src={asset.image_preview_url}
-          alt={asset.name}
-          loading="lazy"
-        />
+        {asset.image_preview_url ? (
+          <img
+            className={`w-full h-full object-cover ${
+              metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
+            }`}
+            src={asset.image_preview_url}
+            alt={asset.name}
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex flex-col justify-center items-center w-full h-full break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200">
+            {asset.name || asset.token_id}
+          </div>
+        )}
       </div>
       {metadataIsVisible && (
         <div data-test-id="metadata-section" className="p-4">
@@ -122,13 +128,8 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   const loadAssets = async (owner: string, offset: number) => {
     const rawAssets = await fetchAssets(owner, offset);
-    const displayableAssets = rawAssets.filter((asset: any) =>
-      Boolean(asset.image_preview_url)
-    );
     console.log('Got %s assets', rawAssets.length, rawAssets);
-    console.log('%s displayable assets', displayableAssets.length);
-
-    setAssets((prevAssets) => [...prevAssets, ...displayableAssets]);
+    setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
   };
 
