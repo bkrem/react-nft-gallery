@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
+// import styled from '@emotion/styled';
 
 import './tailwind.css';
 
@@ -28,13 +28,6 @@ import './tailwind.css';
 //   justify-content: center;
 // `;
 
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 1rem;
-`;
-
 const OPENSEA_API_OFFSET = 50;
 
 // const ImageWithOverlay: React.FC<{ asset: any }> = ({ asset }) => {
@@ -58,7 +51,14 @@ const ImageWithAttributes: React.FC<{
   return (
     <article className="rounded-2xl bg-white dark:bg-gray-800">
       <div style={{ height: '20rem' }}>
-        <Img src={asset.image_preview_url} alt={asset.name} loading="lazy" />
+        <img
+          className={`w-full h-full object-cover ${
+            metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
+          }`}
+          src={asset.image_preview_url}
+          alt={asset.name}
+          loading="lazy"
+        />
       </div>
       {metadataIsVisible && (
         <div data-test-id="metadata-section" className="p-4">
@@ -71,7 +71,7 @@ const ImageWithAttributes: React.FC<{
               <img
                 src={asset.collection.image_url}
                 alt={asset.collection.name}
-                className="rounded-full mr-2 w-8 h-8"
+                className="w-8 h-8 mr-2 rounded-full"
               />
             )}
             <div className="text-sm font-semibold truncate dark:text-gray-200">
@@ -138,9 +138,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   // TODO: Handle rendering of .mp4 previews
   // TODO: handle rendering of non-image assets (e.g. ENS,...)
+  // TODO: handle no asset.name case
+  // TODO: remove debug bg color
   return (
     <section className={darkMode ? 'dark' : ''}>
-      {/* TODO: remove debug bg color */}
       <div className="bg-yellow-100 dark:bg-gray-900">
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {assets.map((asset: any) => (
