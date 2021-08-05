@@ -38,7 +38,6 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
             'w-full h-full object-cover cursor-pointer',
             metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
           )}
-          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
           src={asset.image_preview_url}
           preload="auto"
           controlsList="nodownload"
