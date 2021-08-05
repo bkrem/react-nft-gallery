@@ -12,7 +12,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   asset,
   metadataIsVisible,
 }) => {
-  const assetTitle = asset.name || asset.token_id;
+  const assetTitle = asset.name || `TokenID: ${asset.token_id}`;
 
   const renderAssetMedia = () => {
     // No media present -> render the name/tokenId as a placeholder.

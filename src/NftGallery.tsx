@@ -30,7 +30,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const [currentOffset, setCurrentOffset] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
 
-  const fetchAssets = async (owner: string, offset = 0) => {
+  const fetchAssets = async (
+    owner: NftGalleryProps['ownerAddress'],
+    offset = 0
+  ) => {
     try {
       const res = await fetch(
         `https://api.opensea.io/api/v1/assets?exclude_currencies=true&owner=${owner}&limit=50&offset=${offset}`
@@ -42,13 +45,11 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     }
   };
 
-  const loadAssets = async (owner: string, offset: number) => {
+  const loadAssets = async (
+    owner: NftGalleryProps['ownerAddress'],
+    offset: number
+  ) => {
     const rawAssets = await fetchAssets(owner, offset);
-    console.log(
-      'Got %s assets',
-      rawAssets.length
-      // rawAssets
-    );
     setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
   };
@@ -57,9 +58,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     loadAssets(ownerAddress, currentOffset);
   }, [ownerAddress, currentOffset]);
 
-  // TODO: Handle rendering of .mp4 previews
-  // TODO: handle no asset.name case in description
-  // TODO: remove debug bg color
   return (
     <section className={darkMode ? 'dark' : ''}>
       <div className="p-6 bg-gray-50 dark:bg-gray-900">
