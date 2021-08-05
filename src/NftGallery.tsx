@@ -19,12 +19,17 @@ export interface NftGalleryProps {
    * Display asset metadata underneath the NFT. Defaults to `true`.
    */
   metadataIsVisible?: boolean;
+  /**
+   * Sets the maximum amount of items the gallery can render. Defaults to `Infinity`.
+   */
+  maxItems?: number;
 }
 
 export const NftGallery: React.FC<NftGalleryProps> = ({
   ownerAddress = '',
   darkMode = true,
   metadataIsVisible = true,
+  maxItems = Infinity,
 }) => {
   const [assets, setAssets] = useState([] as OpenseaAsset[]);
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -70,7 +75,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
             />
           ))}
         </div>
-        {canLoadMore && (
+        {canLoadMore && maxItems > 50 && (
           <div className="flex justify-center">
             <button
               className="p-4"
