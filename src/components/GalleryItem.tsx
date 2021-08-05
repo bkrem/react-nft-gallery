@@ -20,7 +20,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       return (
         <div
           className={joinClassNames(
-            'flex flex-col justify-center items-center w-full h-full',
+            'flex flex-col justify-center items-center w-full h-full cursor-pointer',
             'break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200'
           )}
         >
@@ -35,7 +35,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       return (
         <video
           className={joinClassNames(
-            'w-full h-full object-cover',
+            'w-full h-full object-cover cursor-pointer',
             metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
           )}
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -52,7 +52,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     return (
       <img
         className={joinClassNames(
-          'w-full h-full object-cover',
+          'w-full h-full object-cover cursor-pointer',
           metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
         )}
         src={asset.image_preview_url}
@@ -71,7 +71,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
             {assetTitle}
           </div>
           <hr className="mx-2 my-4 border-gray-100 dark:border-gray-900" />
-          <div className="flex items-center">
+          <div className="flex items-center cursor-pointer">
             {asset.collection.image_url && (
               <img
                 src={asset.collection.image_url}
