@@ -1,5 +1,6 @@
 import React from 'react';
 import { NftGalleryProps } from '../NftGallery';
+import { joinClassNames } from '../utils';
 
 export interface GalleryItemProps {
   asset: any;
@@ -16,7 +17,12 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     // No media present -> render the name/tokenId as a placeholder.
     if (!asset.image_preview_url) {
       return (
-        <div className="flex flex-col justify-center items-center w-full h-full break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200">
+        <div
+          className={joinClassNames(
+            'flex flex-col justify-center items-center w-full h-full',
+            'break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200'
+          )}
+        >
           {assetTitle}
         </div>
       );
@@ -27,10 +33,10 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     if (assetMediaExt === 'mp4') {
       return (
         <video
-          className={[
+          className={joinClassNames(
             'w-full h-full object-cover',
-            metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl',
-          ].join(' ')}
+            metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
+          )}
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
           src={asset.image_preview_url}
           preload="auto"
@@ -44,10 +50,10 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
 
     return (
       <img
-        className={[
+        className={joinClassNames(
           'w-full h-full object-cover',
-          metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl',
-        ].join(' ')}
+          metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
+        )}
         src={asset.image_preview_url}
         alt={asset.name}
         loading="lazy"
