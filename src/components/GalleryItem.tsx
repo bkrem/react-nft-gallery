@@ -12,7 +12,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
 }) => {
   return (
     <article className="rounded-2xl bg-white dark:bg-gray-800">
-      <div style={{ height: '20rem' }}>
+      <div>
         {asset.image_preview_url ? (
           <img
             className={`w-full h-full object-cover ${
