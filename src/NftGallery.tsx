@@ -57,7 +57,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   // TODO: remove debug bg color
   return (
     <section className={darkMode ? 'dark' : ''}>
-      <div className="p-6 bg-yellow-100 dark:bg-gray-900">
+      <div className="p-6 bg-gray-50 dark:bg-gray-900">
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {assets.map((asset: any) => (
             <GalleryItem

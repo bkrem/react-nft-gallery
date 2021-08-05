@@ -27,6 +27,10 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     if (assetMediaExt === 'mp4') {
       return (
         <video
+          className={[
+            'w-full h-full object-cover',
+            metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl',
+          ].join(' ')}
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
           src={asset.image_preview_url}
           preload="auto"
@@ -40,9 +44,10 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
 
     return (
       <img
-        className={`w-full h-full object-cover ${
-          metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
-        }`}
+        className={[
+          'w-full h-full object-cover',
+          metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl',
+        ].join(' ')}
         src={asset.image_preview_url}
         alt={asset.name}
         loading="lazy"
@@ -51,7 +56,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   };
 
   return (
-    <article className="rounded-2xl bg-white dark:bg-gray-800">
+    <article className="rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition duration-300">
       <div style={{ height: '20rem' }}>{renderAssetMedia()}</div>
       {metadataIsVisible && (
         <div data-test-id="metadata-section" className="p-4">
@@ -60,7 +65,6 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
           </div>
           <hr className="mx-2 my-4 border-gray-100 dark:border-gray-900" />
           <div className="flex items-center">
-            y
             {asset.collection.image_url && (
               <img
                 src={asset.collection.image_url}
