@@ -8,15 +8,15 @@ const OPENSEA_API_OFFSET = 50;
 
 export interface NftGalleryProps {
   /**
-   * Ethereum address for which the gallery should contain associated NFTs.
+   * Ethereum address (`0x...`) for which the gallery should contain associated NFTs. Required.
    */
   ownerAddress: string;
   /**
-   * Display gallery in dark mode.
+   * Display gallery in dark mode. Defaults to `true`.
    */
   darkMode?: boolean;
   /**
-   * Display asset metadata.
+   * Display asset metadata underneath the NFT. Defaults to `true`.
    */
   metadataIsVisible?: boolean;
 }
