@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { GalleryItem } from './components/GalleryItem';
 
 import './tailwind.css';
+import { OpenseaAsset } from './types/OpenseaAsset';
 
 const OPENSEA_API_OFFSET = 50;
 
@@ -25,7 +26,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   darkMode = true,
   metadataIsVisible = true,
 }) => {
-  const [assets, setAssets] = useState([] as any[]);
+  const [assets, setAssets] = useState([] as OpenseaAsset[]);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
 
@@ -43,7 +44,11 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   const loadAssets = async (owner: string, offset: number) => {
     const rawAssets = await fetchAssets(owner, offset);
-    console.log('Got %s assets', rawAssets.length, rawAssets);
+    console.log(
+      'Got %s assets',
+      rawAssets.length
+      // rawAssets
+    );
     setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
   };
@@ -59,7 +64,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     <section className={darkMode ? 'dark' : ''}>
       <div className="p-6 bg-gray-50 dark:bg-gray-900">
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {assets.map((asset: any) => (
+          {assets.map((asset) => (
             <GalleryItem
               key={asset.id}
               asset={asset}

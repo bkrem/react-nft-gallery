@@ -1,9 +1,10 @@
 import React from 'react';
 import { NftGalleryProps } from '../NftGallery';
+import { OpenseaAsset } from '../types/OpenseaAsset';
 import { joinClassNames } from '../utils';
 
 export interface GalleryItemProps {
-  asset: any;
+  asset: OpenseaAsset;
   metadataIsVisible: NftGalleryProps['metadataIsVisible'];
 }
 
