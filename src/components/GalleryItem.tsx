@@ -33,7 +33,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
           <div className="break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200">
             {asset.name}
           </div>
-          <hr className="mx-4 border-gray-100 dark:border-gray-800" />
+          <hr className="mx-2 my-4 border-gray-100 dark:border-gray-900" />
           <div className="flex items-center">
             {asset.collection.image_url && (
               <img
