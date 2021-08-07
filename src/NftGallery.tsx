@@ -22,18 +22,28 @@ export interface NftGalleryProps {
    * Display asset metadata underneath the NFT. Defaults to `true`.
    */
   metadataIsVisible?: boolean;
+  /**
+   * Display gallery in showcase mode. Only NFTs specified in `showcaseItems` will be rendered.
+   * Defaults to `false`.
+   */
+  showcaseMode?: boolean;
+  showcaseItemIds?: string[];
 }
 
 export const NftGallery: React.FC<NftGalleryProps> = ({
   ownerAddress = '',
   darkMode = true,
   metadataIsVisible = true,
+  showcaseMode = false,
+  showcaseItemIds,
 }) => {
   const [assets, setAssets] = useState([] as OpenseaAsset[]);
+  const [showcaseAssets, setShowcaseAssets] = useState([] as OpenseaAsset[]);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const isInitialLoad = assets.length === 0;
+
+  const displayedAssets = showcaseMode ? showcaseAssets : assets;
 
   const fetchAssets = async (
     owner: NftGalleryProps['ownerAddress'],
@@ -54,16 +64,35 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     owner: NftGalleryProps['ownerAddress'],
     offset: number
   ) => {
-    if (isInitialLoad) setIsLoading(true);
+    if (assets.length === 0) setIsLoading(true);
     const rawAssets = await fetchAssets(owner, offset);
+    console.log(rawAssets);
+    // console.log();
+
     setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
-    if (isInitialLoad) setIsLoading(false);
+    if (assets.length === 0) setIsLoading(false);
+  };
+
+  const filterAndSetAssetsForShowcase = (
+    allAssets: OpenseaAsset[],
+    itemIds: string[]
+  ) => {
+    const nextShowcaseAssets = allAssets.filter((asset) =>
+      itemIds.includes(`${asset.asset_contract.address}/${asset.token_id}`)
+    );
+    setShowcaseAssets(nextShowcaseAssets);
   };
 
   useEffect(() => {
     loadAssets(ownerAddress, currentOffset);
   }, [ownerAddress, currentOffset]);
+
+  useEffect(() => {
+    if (assets.length !== 0 && showcaseMode && Array.isArray(showcaseItemIds)) {
+      filterAndSetAssetsForShowcase(assets, showcaseItemIds);
+    }
+  }, [assets, showcaseMode, showcaseItemIds]);
 
   return (
     <section className={joinClassNames(darkMode ? 'dark' : '', 'h-full')}>
@@ -75,7 +104,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
         ) : (
           <>
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {assets.map((asset) => (
+              {displayedAssets.map((asset) => (
                 <GalleryItem
                   key={asset.id}
                   asset={asset}
