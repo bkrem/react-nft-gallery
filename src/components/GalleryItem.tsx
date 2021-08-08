@@ -3,6 +3,8 @@ import { NftGalleryProps } from '../NftGallery';
 import { OpenseaAsset } from '../types/OpenseaAsset';
 import { joinClassNames } from '../utils';
 
+import './gallery-item.css';
+
 export interface GalleryItemProps {
   asset: OpenseaAsset;
   metadataIsVisible: NftGalleryProps['metadataIsVisible'];
@@ -62,8 +64,8 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   };
 
   return (
-    <article className="rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition duration-300">
-      <div style={{ height: '20rem' }}>{renderAssetMedia()}</div>
+    <article className="rnftg-item__article rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition duration-300">
+      <div className="rnftg-item__img-wrapper">{renderAssetMedia()}</div>
       {metadataIsVisible && (
         <div data-test-id="metadata-section" className="p-4">
           <div className="break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200">
