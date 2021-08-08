@@ -58,15 +58,20 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const fetchAssets = async (
     owner: NftGalleryProps['ownerAddress'],
     offset = 0
-  ) => {
+  ): Promise<OpenseaAsset[]> => {
     try {
-      const res = await fetch(
+      const result = await fetch(
         `https://api.opensea.io/api/v1/assets?exclude_currencies=true&owner=${owner}&limit=50&offset=${offset}`
       );
-      const { assets } = await res.json();
+      if (result.status !== 200) {
+        const error = await result.text();
+        throw new Error(error);
+      }
+      const { assets } = await result.json();
       return assets;
     } catch (error) {
       console.error('fetchAssets failed:', error);
+      return [];
     }
   };
 
