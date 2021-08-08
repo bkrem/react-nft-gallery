@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import { GalleryItem } from './components/GalleryItem';
 
 import { OpenseaAsset } from './types/OpenseaAsset';
@@ -32,7 +32,7 @@ export interface NftGalleryProps {
   showcaseMode?: boolean;
 
   /**
-   * An array of IDs for assets that should be displayed in `showcaseMode`.
+   * An array of IDs for assets that should be displayed when `showcaseMode` is active.
    * Each ID is formed by combining the asset's contract address and the asset's own tokenId: `{:assetContractAddress}/{:tokenId}`
    *
    * For example:
@@ -42,6 +42,21 @@ export interface NftGalleryProps {
    * ```
    */
   showcaseItemIds?: string[];
+
+  /**
+   * Overrides the default styling of the gallery's container.
+   */
+  galleryContainerStyle?: CSSProperties;
+
+  /**
+   * Overrides the default styling of all gallery item containers.
+   */
+  itemContainerStyle?: CSSProperties;
+
+  /**
+   * Overrides the default styling of all gallery item image containers.
+   */
+  imgContainerStyle?: CSSProperties;
 }
 
 export const NftGallery: React.FC<NftGalleryProps> = ({
@@ -50,6 +65,9 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   metadataIsVisible = true,
   showcaseMode = false,
   showcaseItemIds,
+  galleryContainerStyle,
+  itemContainerStyle,
+  imgContainerStyle,
 }) => {
   const [assets, setAssets] = useState([] as OpenseaAsset[]);
   const [showcaseAssets, setShowcaseAssets] = useState([] as OpenseaAsset[]);
@@ -111,8 +129,11 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   }, [assets, showcaseMode, showcaseItemIds]);
 
   return (
-    <section className={joinClassNames(darkMode ? 'dark' : '', 'h-full')}>
-      <div className="h-full p-6 overflow-scroll bg-gray-50 dark:bg-gray-900">
+    <div className={joinClassNames(darkMode ? 'dark' : '', 'h-full')}>
+      <div
+        style={galleryContainerStyle}
+        className="h-full p-6 overflow-scroll bg-gray-50 dark:bg-gray-900"
+      >
         {isLoading ? (
           <div className="flex justify-center items-center h-full dark:text-gray-200">
             <div className="rnftg-loader text-gray-800 dark:text-gray-200"></div>
@@ -125,6 +146,8 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   key={asset.id}
                   asset={asset}
                   metadataIsVisible={metadataIsVisible}
+                  itemContainerStyle={itemContainerStyle}
+                  imgContainerStyle={imgContainerStyle}
                 />
               ))}
             </div>
@@ -145,6 +168,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
           </>
         )}
       </div>
-    </section>
+    </div>
   );
 };

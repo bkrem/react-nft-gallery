@@ -1,4 +1,4 @@
-.rnftg-item__article {
+.rnftg-item {
   width: 12rem;
 }
 
@@ -7,8 +7,8 @@
   height: 12rem;
 }
 
-@media screen and (min-width: 768px) {
-  .rnftg-item__article {
+@media (min-width: 768px) {
+  .rnftg-item {
     width: auto;
   }
 
