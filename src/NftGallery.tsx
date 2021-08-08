@@ -129,18 +129,25 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   }, [assets, showcaseMode, showcaseItemIds]);
 
   return (
-    <div className={joinClassNames(darkMode ? 'dark' : '', 'h-full')}>
+    <div
+      className={joinClassNames(darkMode ? 'rnftg-dark' : '', 'rnftg-h-full')}
+    >
       <div
         style={galleryContainerStyle}
-        className="h-full p-6 overflow-scroll bg-gray-50 dark:bg-gray-900"
+        className="rnftg-h-full rnftg-p-6 rnftg-overflow-scroll rnftg-bg-gray-50 dark:rnftg-bg-gray-900"
       >
         {isLoading ? (
-          <div className="flex justify-center items-center h-full dark:text-gray-200">
-            <div className="rnftg-loader text-gray-800 dark:text-gray-200"></div>
+          <div className="rnftg-flex rnftg-justify-center rnftg-items-center rnftg-h-full dark:rnftg-text-gray-200">
+            <div className="rnftg-loader rnftg-text-gray-800 dark:rnftg-text-gray-200"></div>
           </div>
         ) : (
           <>
-            <div className="grid gap-6 grid-flow-col md:grid-flow-row md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div
+              className={joinClassNames(
+                'rnftg-grid rnftg-gap-6 rnftg-grid-flow-col md:rnftg-grid-flow-row',
+                'md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
+              )}
+            >
               {displayedAssets.map((asset) => (
                 <GalleryItem
                   key={asset.id}
@@ -152,9 +159,9 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
               ))}
             </div>
             {canLoadMore && (
-              <div className="flex justify-center">
+              <div className="rnftg-flex rnftg-justify-center">
                 <button
-                  className="p-4"
+                  className="rnftg-p-4"
                   onClick={() => {
                     setCurrentOffset(
                       (prevOffset) => prevOffset + OPENSEA_API_OFFSET

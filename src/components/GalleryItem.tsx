@@ -26,8 +26,8 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       return (
         <div
           className={joinClassNames(
-            'flex flex-col justify-center items-center w-full h-full cursor-pointer',
-            'break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200'
+            'rnftg-flex rnftg-flex-col rnftg-justify-center rnftg-items-center rnftg-w-full rnftg-h-full rnftg-cursor-pointer',
+            'rnftg-break-words rnftg-truncate rnftg-text-lg rnftg-font-semibold dark:rnftg-text-gray-200'
           )}
         >
           {assetTitle}
@@ -41,8 +41,8 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       return (
         <video
           className={joinClassNames(
-            'w-full h-full object-cover cursor-pointer',
-            metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
+            'rnftg-w-full rnftg-h-full rnftg-object-cover rnftg-cursor-pointer',
+            metadataIsVisible ? 'rnftg-rounded-t-2xl' : 'rnftg-rounded-2xl'
           )}
           src={asset.image_preview_url}
           preload="auto"
@@ -57,8 +57,8 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     return (
       <img
         className={joinClassNames(
-          'w-full h-full object-cover cursor-pointer',
-          metadataIsVisible ? 'rounded-t-2xl' : 'rounded-2xl'
+          'rnftg-w-full rnftg-h-full rnftg-object-cover rnftg-cursor-pointer',
+          metadataIsVisible ? 'rnftg-rounded-t-2xl' : 'rnftg-rounded-2xl'
         )}
         src={asset.image_preview_url}
         alt={asset.name}
@@ -70,26 +70,26 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   return (
     <article
       style={itemContainerStyle}
-      className="rnftg-item rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition duration-300"
+      className="rnftg-item rnftg-rounded-2xl rnftg-bg-white dark:rnftg-bg-gray-800 rnftg-shadow-lg hover:rnftg-shadow-xl rnftg-transition rnftg-duration-300"
     >
       <div style={imgContainerStyle} className="rnftg-item__img-wrapper">
         {renderAssetMedia()}
       </div>
       {metadataIsVisible && (
-        <div data-test-id="metadata-section" className="p-4">
-          <div className="break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200">
+        <div className="rnftg-p-4">
+          <div className="rnftg-break-words rnftg-cursor-pointer rnftg-truncate rnftg-text-lg rnftg-font-semibold dark:rnftg-text-gray-200">
             {assetTitle}
           </div>
-          <hr className="mx-2 my-4 border-gray-100 dark:border-gray-900" />
-          <div className="flex items-center cursor-pointer">
+          <hr className="rnftg-mx-2 rnftg-my-4 rnftg-border-gray-100 dark:rnftg-border-gray-900" />
+          <div className="rnftg-flex rnftg-items-center rnftg-cursor-pointer">
             {asset.collection.image_url && (
               <img
                 src={asset.collection.image_url}
                 alt={asset.collection.name}
-                className="w-8 h-8 mr-2 rounded-full"
+                className="rnftg-w-8 rnftg-h-8 rnftg-mr-2 rnftg-rounded-full"
               />
             )}
-            <div className="text-sm font-semibold truncate dark:text-gray-200">
+            <div className="rnftg-text-sm rnftg-font-semibold rnftg-truncate dark:rnftg-text-gray-200">
               {asset.collection.name}
             </div>
           </div>
