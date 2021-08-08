@@ -23,10 +23,20 @@ export interface NftGalleryProps {
    */
   metadataIsVisible?: boolean;
   /**
-   * Display gallery in showcase mode. Only NFTs specified in `showcaseItems` will be rendered.
+   * Display gallery in showcase mode. Only NFTs specified in `showcaseItemIds` will be rendered.
    * Defaults to `false`.
    */
   showcaseMode?: boolean;
+  /**
+   * An array of IDs for assets that should be displayed in `showcaseMode`.
+   * Each ID is formed by combining the asset's contract address and the asset's own tokenId: `{:assetContractAddress}/{:tokenId}`
+   *
+   * For example:
+   *
+   * ```jsx
+   * showcaseItemIds={["0xabcdef.../123", "0xa1b2c3.../789"]}
+   * ```
+   */
   showcaseItemIds?: string[];
 }
 
@@ -66,15 +76,12 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   ) => {
     if (assets.length === 0) setIsLoading(true);
     const rawAssets = await fetchAssets(owner, offset);
-    console.log(rawAssets);
-    // console.log();
-
     setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
     if (assets.length === 0) setIsLoading(false);
   };
 
-  const filterAndSetAssetsForShowcase = (
+  const updateShowcaseAssets = (
     allAssets: OpenseaAsset[],
     itemIds: string[]
   ) => {
@@ -90,7 +97,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   useEffect(() => {
     if (assets.length !== 0 && showcaseMode && Array.isArray(showcaseItemIds)) {
-      filterAndSetAssetsForShowcase(assets, showcaseItemIds);
+      updateShowcaseAssets(assets, showcaseItemIds);
     }
   }, [assets, showcaseMode, showcaseItemIds]);
 
