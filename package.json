@@ -1,7 +1,10 @@
 {
+  "name": "react-nft-gallery",
+  "author": "Ben Kremer <contact@bkrem.dev>",
   "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
+  "module": "dist/react-nft-gallery.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
@@ -21,9 +24,6 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
-  "peerDependencies": {
-    "react": ">=16"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -35,9 +35,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "react-nft-gallery",
-  "author": "Ben Kremer",
-  "module": "dist/react-nft-gallery.esm.js",
   "size-limit": [
     {
       "path": "dist/react-nft-gallery.cjs.production.min.js",
@@ -52,6 +49,9 @@
     "moduleNameMapper": {
       "\\.(css|less|scss|sass)$": "identity-obj-proxy"
     }
+  },
+  "peerDependencies": {
+    "react": ">=16"
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
