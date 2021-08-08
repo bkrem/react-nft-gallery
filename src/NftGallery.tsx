@@ -14,19 +14,23 @@ export interface NftGalleryProps {
    * Ethereum address (`0x...`) for which the gallery should contain associated NFTs. Required.
    */
   ownerAddress: string;
-  /**
-   * Display gallery in dark mode. Defaults to `true`.
-   */
-  darkMode?: boolean;
+
   /**
    * Display asset metadata underneath the NFT. Defaults to `true`.
    */
   metadataIsVisible?: boolean;
+
+  /**
+   * Display gallery in dark mode. Defaults to `false`.
+   */
+  darkMode?: boolean;
+
   /**
    * Display gallery in showcase mode. Only NFTs specified in `showcaseItemIds` will be rendered.
    * Defaults to `false`.
    */
   showcaseMode?: boolean;
+
   /**
    * An array of IDs for assets that should be displayed in `showcaseMode`.
    * Each ID is formed by combining the asset's contract address and the asset's own tokenId: `{:assetContractAddress}/{:tokenId}`
@@ -42,7 +46,7 @@ export interface NftGalleryProps {
 
 export const NftGallery: React.FC<NftGalleryProps> = ({
   ownerAddress = '',
-  darkMode = true,
+  darkMode = false,
   metadataIsVisible = true,
   showcaseMode = false,
   showcaseItemIds,
