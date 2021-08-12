@@ -1,14 +1,16 @@
 import React from 'react';
+import { OpenseaAsset } from '../../types/OpenseaAsset';
+import { getAssetTitle } from '../../utils';
 
 import './perfundo-lightbox.css';
 
 export interface LightboxProps {
+  asset: OpenseaAsset;
   index: number;
-  imageUrl?: string;
 }
 
 // TODO: deal with possibly empty/undefined asset.image_url -> render placeholder
-export const Lightbox: React.FC<LightboxProps> = ({ imageUrl, index }) => {
+export const Lightbox: React.FC<LightboxProps> = ({ asset, index }) => {
   return (
     <div
       id={`lightbox-${index}`}
@@ -24,7 +26,11 @@ export const Lightbox: React.FC<LightboxProps> = ({ imageUrl, index }) => {
           evt.stopPropagation();
         }}
       >
-        <img className="perfundo__image" src={imageUrl} loading="lazy" />
+        <img className="perfundo__image" src={asset.image_url} loading="lazy" />
+        <div className="rnftg-text-gray-200">
+          <div>{getAssetTitle(asset)}</div>
+          <div>{asset.collection.name}</div>
+        </div>
       </figure>
       <a
         href="#lightbox-untarget"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NftGalleryProps } from '../../NftGallery';
 import { OpenseaAsset } from '../../types/OpenseaAsset';
-import { joinClassNames } from '../../utils';
+import { getAssetTitle, joinClassNames } from '../../utils';
 import { Lightbox } from '../Lightbox/Lightbox';
 
 import './gallery-item.css';
@@ -23,7 +23,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   itemContainerStyle,
   imgContainerStyle,
 }) => {
-  const assetTitle = asset.name || `TokenID: ${asset.token_id}`;
+  const assetTitle = getAssetTitle(asset);
 
   const renderAssetMedia = () => {
     // No media present -> render the name/tokenId as a placeholder.
@@ -104,7 +104,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
           </div>
         </div>
       )}
-      {hasLightbox && <Lightbox index={index} imageUrl={asset.image_url} />}
+      {hasLightbox && <Lightbox index={index} asset={asset} />}
     </article>
   );
 };
