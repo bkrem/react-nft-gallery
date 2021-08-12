@@ -17,7 +17,13 @@ export const Lightbox: React.FC<LightboxProps> = ({ imageUrl, index }) => {
         window.location.assign('#lightbox-untarget');
       }}
     >
-      <figure className="perfundo__content perfundo__figure">
+      <figure
+        className="perfundo__content perfundo__figure"
+        onClick={(evt) => {
+          // Prevents clicks on the image triggering `#lightbox-untarget`.
+          evt.stopPropagation();
+        }}
+      >
         <img className="perfundo__image" src={imageUrl} loading="lazy" />
       </figure>
       <a
