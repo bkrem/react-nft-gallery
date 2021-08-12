@@ -11,17 +11,20 @@ const OPENSEA_API_OFFSET = 50;
 
 export interface NftGalleryProps {
   /**
-   * Ethereum address (`0x...`) for which the gallery should contain associated NFTs. Required.
+   * Ethereum address (`0x...`) for which the gallery should contain associated NFTs.
+   * Required.
    */
   ownerAddress: string;
 
   /**
-   * Display asset metadata underneath the NFT. Defaults to `true`.
+   * Display asset metadata underneath the NFT.
+   * Defaults to `true`.
    */
   metadataIsVisible?: boolean;
 
   /**
-   * Display gallery in dark mode. Defaults to `false`.
+   * Display gallery in dark mode.
+   * Defaults to `false`.
    */
   darkMode?: boolean;
 
@@ -42,6 +45,12 @@ export interface NftGalleryProps {
    * ```
    */
   showcaseItemIds?: string[];
+
+  /**
+   * Enables/disables the lightbox being shown when a gallery item is clicked/tapped.
+   * Defaults to `true`.
+   */
+  hasLightbox?: boolean;
 
   /**
    * Overrides the default styling of the gallery's container.
@@ -65,6 +74,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   metadataIsVisible = true,
   showcaseMode = false,
   showcaseItemIds,
+  hasLightbox = true,
   galleryContainerStyle,
   itemContainerStyle,
   imgContainerStyle,
@@ -154,6 +164,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   index={index}
                   asset={asset}
                   metadataIsVisible={metadataIsVisible}
+                  hasLightbox={hasLightbox}
                   itemContainerStyle={itemContainerStyle}
                   imgContainerStyle={imgContainerStyle}
                 />

@@ -10,6 +10,7 @@ export interface GalleryItemProps {
   asset: OpenseaAsset;
   index: number;
   metadataIsVisible: NftGalleryProps['metadataIsVisible'];
+  hasLightbox: NftGalleryProps['hasLightbox'];
   itemContainerStyle: NftGalleryProps['itemContainerStyle'];
   imgContainerStyle: NftGalleryProps['imgContainerStyle'];
 }
@@ -18,6 +19,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   asset,
   index,
   metadataIsVisible,
+  hasLightbox,
   itemContainerStyle,
   imgContainerStyle,
 }) => {
@@ -102,7 +104,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
           </div>
         </div>
       )}
-      <Lightbox index={index} imageUrl={asset.image_url} />
+      {hasLightbox && <Lightbox index={index} imageUrl={asset.image_url} />}
     </article>
   );
 };
