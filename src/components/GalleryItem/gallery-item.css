@@ -7,6 +7,11 @@
   height: 12rem;
 }
 
+.rnftg-item__lightbox-img {
+  width: 12rem;
+  padding-top: 12rem;
+}
+
 @media (min-width: 768px) {
   .rnftg-item {
     width: auto;
@@ -15,5 +20,10 @@
   .rnftg-item__img-wrapper {
     width: auto;
     height: 20rem;
+  }
+
+  .rnftg-item__lightbox-img {
+    width: 20rem;
+    padding-top: 20rem;
   }
 }

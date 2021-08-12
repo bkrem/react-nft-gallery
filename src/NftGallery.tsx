@@ -1,5 +1,5 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
-import { GalleryItem } from './components/GalleryItem';
+import { GalleryItem } from './components/GalleryItem/GalleryItem';
 
 import { OpenseaAsset } from './types/OpenseaAsset';
 import { joinClassNames } from './utils';
@@ -148,9 +148,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                 'md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
               )}
             >
-              {displayedAssets.map((asset) => (
+              {displayedAssets.map((asset, index) => (
                 <GalleryItem
                   key={asset.id}
+                  index={index}
                   asset={asset}
                   metadataIsVisible={metadataIsVisible}
                   itemContainerStyle={itemContainerStyle}

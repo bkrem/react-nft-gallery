@@ -1,12 +1,14 @@
 import React from 'react';
-import { NftGalleryProps } from '../NftGallery';
-import { OpenseaAsset } from '../types/OpenseaAsset';
-import { joinClassNames } from '../utils';
+import { NftGalleryProps } from '../../NftGallery';
+import { OpenseaAsset } from '../../types/OpenseaAsset';
+import { joinClassNames } from '../../utils';
+import { Lightbox } from '../Lightbox/Lightbox';
 
 import './gallery-item.css';
 
 export interface GalleryItemProps {
   asset: OpenseaAsset;
+  index: number;
   metadataIsVisible: NftGalleryProps['metadataIsVisible'];
   itemContainerStyle: NftGalleryProps['itemContainerStyle'];
   imgContainerStyle: NftGalleryProps['imgContainerStyle'];
@@ -14,6 +16,7 @@ export interface GalleryItemProps {
 
 export const GalleryItem: React.FC<GalleryItemProps> = ({
   asset,
+  index,
   metadataIsVisible,
   itemContainerStyle,
   imgContainerStyle,
@@ -36,7 +39,6 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     }
 
     const assetMediaExt = asset.image_preview_url.split('.').pop();
-
     if (assetMediaExt === 'mp4') {
       return (
         <video
@@ -73,7 +75,12 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       className="rnftg-item rnftg-rounded-2xl rnftg-bg-white dark:rnftg-bg-gray-800 rnftg-shadow-lg hover:rnftg-shadow-xl rnftg-transition rnftg-duration-300"
     >
       <div style={imgContainerStyle} className="rnftg-item__img-wrapper">
-        {renderAssetMedia()}
+        <a
+          className="perfundo__link rnftg-no-underline"
+          href={`#lightbox-${index}`}
+        >
+          {renderAssetMedia()}
+        </a>
       </div>
       {metadataIsVisible && (
         <div className="rnftg-p-4">
@@ -95,6 +102,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
           </div>
         </div>
       )}
+      <Lightbox index={index} imageUrl={asset.image_url} />
     </article>
   );
 };
