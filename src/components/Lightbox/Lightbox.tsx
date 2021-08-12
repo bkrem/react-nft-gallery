@@ -10,7 +10,13 @@ export interface LightboxProps {
 // TODO: deal with possibly empty/undefined asset.image_url -> render placeholder
 export const Lightbox: React.FC<LightboxProps> = ({ imageUrl, index }) => {
   return (
-    <div id={`lightbox-${index}`} className="perfundo__overlay fadeIn">
+    <div
+      id={`lightbox-${index}`}
+      className="perfundo__overlay"
+      onClick={() => {
+        window.location.assign('#lightbox-untarget');
+      }}
+    >
       <figure className="perfundo__content perfundo__figure">
         <img className="perfundo__image" src={imageUrl} loading="lazy" />
       </figure>
