@@ -4,4 +4,4 @@ import { OpenseaAsset } from './types/OpenseaAsset';
 export const joinClassNames = (...args: string[]) => args.join(' ').trim();
 
 export const getAssetTitle = (asset: OpenseaAsset) =>
-  asset.name || `TokenID: ${asset.token_id}`;
+  asset.name || `#${asset.token_id}`;
