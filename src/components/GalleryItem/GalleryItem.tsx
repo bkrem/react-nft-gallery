@@ -6,6 +6,17 @@ import { Lightbox } from '../Lightbox/Lightbox';
 
 import './gallery-item.css';
 
+const ExternalLink: React.FC<{ href: string }> = ({ href, children }) => (
+  <a
+    className="rnftg-text-black dark:rnftg-text-gray-200"
+    href={href}
+    target="_blank"
+    rel="noopener"
+  >
+    {children}
+  </a>
+);
+
 export interface GalleryItemProps {
   asset: OpenseaAsset;
   index: number;
@@ -86,8 +97,8 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       </div>
       {metadataIsVisible && (
         <div className="rnftg-p-4">
-          <div className="rnftg-break-words rnftg-cursor-pointer rnftg-truncate rnftg-text-lg rnftg-font-semibold dark:rnftg-text-gray-200">
-            {assetTitle}
+          <div className="rnftg-break-words rnftg-truncate rnftg-text-lg rnftg-font-semibold dark:rnftg-text-gray-200">
+            <ExternalLink href={asset.permalink}>{assetTitle}</ExternalLink>
           </div>
           <hr className="rnftg-mx-2 rnftg-my-4 rnftg-border-gray-100 dark:rnftg-border-gray-900" />
           <div className="rnftg-flex rnftg-items-center rnftg-cursor-pointer">
@@ -99,7 +110,11 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
               />
             )}
             <div className="rnftg-text-sm rnftg-font-semibold rnftg-truncate dark:rnftg-text-gray-200">
-              {asset.collection.name}
+              <ExternalLink
+                href={`https://opensea.io/collection/${asset.collection.slug}`}
+              >
+                {asset.collection.name}
+              </ExternalLink>
             </div>
           </div>
         </div>
