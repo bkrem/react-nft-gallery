@@ -9,7 +9,6 @@ export interface LightboxProps {
   index: number;
 }
 
-// TODO: deal with possibly empty/undefined asset.image_url -> render placeholder
 export const Lightbox: React.FC<LightboxProps> = ({ asset, index }) => {
   return (
     <div
