@@ -154,11 +154,12 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
           <>
             <div
               className={joinClassNames(
-                'rnftg-grid rnftg-gap-6 rnftg-grid-flow-col md:rnftg-grid-flow-row',
-                'md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
+                'rnftg-grid rnftg-gap-6 rnftg-grid-flow-row',
+                'rnftg-grid-cols-1 md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
               )}
             >
               {displayedAssets.map((asset, index) => (
+                // <div key={asset.id} className="rnftg-flex rnftg-justify-center">
                 <GalleryItem
                   key={asset.id}
                   index={index}
@@ -168,6 +169,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   itemContainerStyle={itemContainerStyle}
                   imgContainerStyle={imgContainerStyle}
                 />
+                // </div>
               ))}
             </div>
             {canLoadMore && (

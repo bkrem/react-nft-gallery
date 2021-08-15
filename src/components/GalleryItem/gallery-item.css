@@ -1,15 +1,10 @@
 .rnftg-item {
-  width: 12rem;
+  width: auto;
 }
 
 .rnftg-item__img-wrapper {
-  width: 12rem;
-  height: 12rem;
-}
-
-.rnftg-item__lightbox-img {
-  width: 12rem;
-  padding-top: 12rem;
+  width: auto;
+  height: 20rem;
 }
 
 @media (min-width: 768px) {
@@ -20,10 +15,5 @@
   .rnftg-item__img-wrapper {
     width: auto;
     height: 20rem;
-  }
-
-  .rnftg-item__lightbox-img {
-    width: 20rem;
-    padding-top: 20rem;
   }
 }
