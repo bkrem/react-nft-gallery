@@ -8,7 +8,7 @@ import './gallery-item.css';
 
 const ExternalLink: React.FC<{ href: string }> = ({ href, children }) => (
   <a
-    className="rnftg-text-black dark:rnftg-text-gray-200"
+    className="rnftg-no-underline rnftg-text-black dark:rnftg-text-gray-200"
     href={href}
     target="_blank"
     rel="noopener"
