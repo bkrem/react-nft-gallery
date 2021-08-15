@@ -10,9 +10,6 @@
     "dist",
     "src"
   ],
-  "engines": {
-    "node": ">=12"
-  },
   "scripts": {
     "start": "tsdx watch",
     "build": "NODE_ENV=production tsdx build",
@@ -23,6 +20,9 @@
     "analyze": "size-limit --why",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "husky": {
     "hooks": {
@@ -50,6 +50,15 @@
       "\\.(css|less|scss|sass)$": "identity-obj-proxy"
     }
   },
+  "keywords": [
+    "react",
+    "react-component",
+    "ethereum",
+    "web3",
+    "nft",
+    "gallery",
+    "typescript"
+  ],
   "peerDependencies": {
     "react": ">=16"
   },
