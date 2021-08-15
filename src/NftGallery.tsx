@@ -53,6 +53,12 @@ export interface NftGalleryProps {
   hasLightbox?: boolean;
 
   /**
+   * Renders the gallery as a single row with horizontal scrolling. Useful when rendering the gallery between other content.
+   * Defaults to `false`.
+   */
+  isInline?: boolean;
+
+  /**
    * Overrides the default styling of the gallery's container.
    */
   galleryContainerStyle?: CSSProperties;
@@ -75,6 +81,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   showcaseMode = false,
   showcaseItemIds,
   hasLightbox = true,
+  isInline = false,
   galleryContainerStyle,
   itemContainerStyle,
   imgContainerStyle,
@@ -144,7 +151,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     >
       <div
         style={galleryContainerStyle}
-        className="rnftg-h-full rnftg-p-6 rnftg-overflow-scroll rnftg-bg-gray-50 dark:rnftg-bg-gray-900"
+        className={joinClassNames(
+          'rnftg-h-full rnftg-p-6 rnftg-overflow-scroll rnftg-bg-gray-50 dark:rnftg-bg-gray-900',
+          isInline ? 'rnftg--inline' : ''
+        )}
       >
         {isLoading ? (
           <div className="rnftg-flex rnftg-justify-center rnftg-items-center rnftg-h-full dark:rnftg-text-gray-200">
@@ -154,12 +164,13 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
           <>
             <div
               className={joinClassNames(
-                'rnftg-grid rnftg-gap-6 rnftg-grid-flow-row',
-                'rnftg-grid-cols-1 md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
+                'rnftg-grid rnftg-gap-6',
+                isInline
+                  ? 'rnftg-grid-flow-col'
+                  : 'rnftg-grid-flow-row rnftg-grid-cols-1 md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
               )}
             >
               {displayedAssets.map((asset, index) => (
-                // <div key={asset.id} className="rnftg-flex rnftg-justify-center">
                 <GalleryItem
                   key={asset.id}
                   index={index}
@@ -169,7 +180,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   itemContainerStyle={itemContainerStyle}
                   imgContainerStyle={imgContainerStyle}
                 />
-                // </div>
               ))}
             </div>
             {canLoadMore && (

@@ -7,13 +7,35 @@
   height: 20rem;
 }
 
+.rnftg--inline .rnftg-item {
+  width: 12rem;
+}
+
+.rnftg--inline .rnftg-item__img-wrapper {
+  width: 12rem;
+  height: 12rem;
+}
+
+/* tailwind `md` breakpoint */
 @media (min-width: 768px) {
-  .rnftg-item {
-    width: auto;
+  .rnftg--inline .rnftg-item {
+    width: 16rem;
   }
 
-  .rnftg-item__img-wrapper {
-    width: auto;
+  .rnftg--inline .rnftg-item__img-wrapper {
+    width: 16rem;
+    height: 16rem;
+  }
+}
+
+/* tailwind `lg` breakpoint */
+@media (min-width: 1024px) {
+  .rnftg--inline .rnftg-item {
+    width: 20rem;
+  }
+
+  .rnftg--inline .rnftg-item__img-wrapper {
+    width: 20rem;
     height: 20rem;
   }
 }
