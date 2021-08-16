@@ -6,6 +6,7 @@ import { joinClassNames } from './utils';
 
 import './styles/tailwind.css';
 import './styles/loader.css';
+import { LoadMoreButton } from './components/LoadMoreButton';
 
 const OPENSEA_API_OFFSET = 50;
 
@@ -161,7 +162,12 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
             <div className="rnftg-loader rnftg-text-gray-800 dark:rnftg-text-gray-200"></div>
           </div>
         ) : (
-          <>
+          <div
+            className={joinClassNames(
+              'rnftg-flex',
+              isInline ? 'rnftg-flex-row' : 'rnftg-flex-col'
+            )}
+          >
             <div
               className={joinClassNames(
                 'rnftg-grid rnftg-gap-6',
@@ -183,20 +189,15 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
               ))}
             </div>
             {canLoadMore && (
-              <div className="rnftg-flex rnftg-justify-center">
-                <button
-                  className="rnftg-p-4"
-                  onClick={() => {
-                    setCurrentOffset(
-                      (prevOffset) => prevOffset + OPENSEA_API_OFFSET
-                    );
-                  }}
-                >
-                  Load more
-                </button>
-              </div>
+              <LoadMoreButton
+                onClick={() => {
+                  setCurrentOffset(
+                    (prevOffset) => prevOffset + OPENSEA_API_OFFSET
+                  );
+                }}
+              />
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
