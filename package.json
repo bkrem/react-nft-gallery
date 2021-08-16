@@ -1,8 +1,9 @@
 {
   "name": "react-nft-gallery",
-  "author": "Ben Kremer <contact@bkrem.dev>",
   "version": "0.1.2",
+  "description": "React component to display your/anybody's NFTs as a gallery",
   "license": "MIT",
+  "author": "Ben Kremer <contact@bkrem.dev>",
   "main": "dist/index.js",
   "module": "dist/react-nft-gallery.esm.js",
   "typings": "dist/index.d.ts",
@@ -10,6 +11,14 @@
     "dist",
     "src"
   ],
+  "homepage": "https://github.com/bkrem/react-nft-gallery",
+  "bugs": {
+    "url": "https://github.com/bkrem/react-nft-gallery/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bkrem/react-nft-gallery.git"
+  },
   "scripts": {
     "start": "tsdx watch",
     "build": "NODE_ENV=production tsdx build",
