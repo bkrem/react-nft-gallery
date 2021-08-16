@@ -1,8 +1,3 @@
-import {
-  NftGallery as _NftGallery,
-  NftGalleryProps as _NftGalleryProps,
-} from './NftGallery';
+import { NftGallery, NftGalleryProps } from './NftGallery';
 
-export const NftGallery = _NftGallery;
-
-export type NftGalleryProps = _NftGalleryProps;
+export { NftGallery, NftGalleryProps };
