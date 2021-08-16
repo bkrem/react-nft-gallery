@@ -152,7 +152,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       <div
         style={galleryContainerStyle}
         className={joinClassNames(
-          'rnftg-h-full rnftg-p-6 rnftg-overflow-scroll rnftg-bg-gray-50 dark:rnftg-bg-gray-900',
+          'rnftg-h-full rnftg-p-6 rnftg-overflow-auto rnftg-bg-gray-50 dark:rnftg-bg-gray-900',
           isInline ? 'rnftg--inline' : ''
         )}
       >
