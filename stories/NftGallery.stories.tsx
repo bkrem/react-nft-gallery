@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
-import { NftGallery, NftGalleryProps } from '../src/NftGallery';
+import { NftGallery, NftGalleryProps } from '../src/';
 
 const meta: Meta = {
   title: 'Welcome',
