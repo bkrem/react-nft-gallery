@@ -1,7 +1,7 @@
 {
   "name": "react-nft-gallery",
   "author": "Ben Kremer <contact@bkrem.dev>",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/react-nft-gallery.esm.js",
