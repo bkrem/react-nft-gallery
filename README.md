@@ -28,11 +28,17 @@
   <h3 align="center"><span>👾 </span><a href="https://bkrem.github.io/react-nft-gallery">Playground (Storybook)</a></h3>
 </p>
 
-> ⚠️ This library is currently still in beta and should not be considered stable until `v1.0.0` is released.
+React NFT Gallery is a React component to render any Ethereum address's NFTs as a gallery.
+The NFT assets for an address are resolved via the [OpenSea API](https://docs.opensea.io/reference/api-overview).
+
+> ⚠️ **Please note**: This library is currently in beta and should not be considered stable until `v1.0.0` is released.
 >
 > This means:
 >
-> - Things may not always render as expected across different browsers and browser versions.
+> - The gallery may not always render/behave as expected across different browsers & browser versions.
+>   Please [open an issue](https://github.com/bkrem/react-nft-gallery/issues) in this case.
+> - The gallery may not render/behave as expected for your use case.
+>   Please [open an issue](https://github.com/bkrem/react-nft-gallery/issues) in this case.
 > - The top-level API (i.e. `NftGalleryProps`) may see breaking changes between releases until standard
 >   semantic versioning is adopted from `v1.0.0` onwards.
 
