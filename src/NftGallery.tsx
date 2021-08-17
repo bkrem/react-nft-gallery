@@ -1,12 +1,11 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { GalleryItem } from './components/GalleryItem/GalleryItem';
-
+import { LoadMoreButton } from './components/LoadMoreButton';
 import { OpenseaAsset } from './types/OpenseaAsset';
 import { joinClassNames } from './utils';
 
 import './styles/tailwind.css';
 import './styles/loader.css';
-import { LoadMoreButton } from './components/LoadMoreButton';
 
 const OPENSEA_API_OFFSET = 50;
 
