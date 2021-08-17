@@ -22,6 +22,7 @@ export interface GalleryItemProps {
   index: number;
   metadataIsVisible: NftGalleryProps['metadataIsVisible'];
   hasLightbox: NftGalleryProps['hasLightbox'];
+  hasExternalLinks: NftGalleryProps['hasExternalLinks'];
   itemContainerStyle: NftGalleryProps['itemContainerStyle'];
   imgContainerStyle: NftGalleryProps['imgContainerStyle'];
 }
@@ -31,6 +32,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   index,
   metadataIsVisible,
   hasLightbox,
+  hasExternalLinks,
   itemContainerStyle,
   imgContainerStyle,
 }) => {
@@ -98,10 +100,14 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       {metadataIsVisible && (
         <div className="rnftg-p-4">
           <div className="rnftg-break-words rnftg-truncate rnftg-text-lg rnftg-font-semibold dark:rnftg-text-gray-200">
-            <ExternalLink href={asset.permalink}>{assetTitle}</ExternalLink>
+            {hasExternalLinks ? (
+              <ExternalLink href={asset.permalink}>{assetTitle}</ExternalLink>
+            ) : (
+              assetTitle
+            )}
           </div>
           <hr className="rnftg-mx-2 rnftg-my-4 rnftg-border-gray-100 dark:rnftg-border-gray-900" />
-          <div className="rnftg-flex rnftg-items-center rnftg-cursor-pointer">
+          <div className="rnftg-flex rnftg-items-center">
             {asset.collection.image_url && (
               <img
                 src={asset.collection.image_url}
@@ -110,11 +116,15 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
               />
             )}
             <div className="rnftg-text-sm rnftg-font-semibold rnftg-truncate dark:rnftg-text-gray-200">
-              <ExternalLink
-                href={`https://opensea.io/collection/${asset.collection.slug}`}
-              >
-                {asset.collection.name}
-              </ExternalLink>
+              {hasExternalLinks ? (
+                <ExternalLink
+                  href={`https://opensea.io/collection/${asset.collection.slug}`}
+                >
+                  {asset.collection.name}
+                </ExternalLink>
+              ) : (
+                asset.collection.name
+              )}
             </div>
           </div>
         </div>

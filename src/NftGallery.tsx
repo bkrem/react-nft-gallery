@@ -53,6 +53,12 @@ export interface NftGalleryProps {
   hasLightbox?: boolean;
 
   /**
+   * Enables/disables a gallery item's title and collection name linking to the asset and collection on OpenSea, respectively.
+   * Defaults to `true`.
+   */
+  hasExternalLinks?: boolean;
+
+  /**
    * Renders the gallery as a single row with horizontal scrolling. Useful when rendering the gallery between other content.
    * Defaults to `false`.
    */
@@ -81,6 +87,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   showcaseMode = false,
   showcaseItemIds,
   hasLightbox = true,
+  hasExternalLinks = true,
   isInline = false,
   galleryContainerStyle,
   itemContainerStyle,
@@ -182,6 +189,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   asset={asset}
                   metadataIsVisible={metadataIsVisible}
                   hasLightbox={hasLightbox}
+                  hasExternalLinks={hasExternalLinks}
                   itemContainerStyle={itemContainerStyle}
                   imgContainerStyle={imgContainerStyle}
                 />
