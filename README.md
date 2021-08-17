@@ -42,6 +42,24 @@ The NFT assets for an address are resolved via the [OpenSea API](https://docs.op
 > - The top-level API (i.e. `NftGalleryProps`) may see breaking changes between releases until standard
 >   semantic versioning is adopted from `v1.0.0` onwards.
 
+## Installation
+
+```bash
+npm i --save react-nft-gallery
+```
+
+## Usage
+
+`ownerAddress` is the only prop that is required out-of-the-box:
+
+```tsx
+import { NftGallery } from 'react-nft-gallery';
+
+// ...
+
+return <NftGallery ownerAddress="0x2e675eeae4747c248bfddbafaa3a8a2fdddaa44b" />;
+```
+
 ## API
 
 ````ts
