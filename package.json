@@ -26,6 +26,7 @@
     "lint": "tsdx lint",
     "prepare": "NODE_ENV=production tsdx build",
     "release": "np",
+    "postpublish": "yarn deploy-storybook",
     "size": "size-limit",
     "analyze": "size-limit --why",
     "storybook": "start-storybook -p 6006",
