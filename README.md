@@ -42,6 +42,11 @@ The NFT assets for an address are resolved via the [OpenSea API](https://docs.op
 > - The top-level API (i.e. `NftGalleryProps`) may see breaking changes between releases until standard
 >   semantic versioning is adopted from `v1.0.0` onwards.
 
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+- [Roadmap](#roadmap)
+
 ## Installation
 
 ```bash
@@ -134,3 +139,12 @@ interface NftGalleryProps {
   imgContainerStyle?: CSSProperties;
 }
 ````
+
+## Roadmap
+
+- [ ] feat: support ENS domain resolution in `ownerAddress` (P1)
+- [ ] feat: support keyboard navigation for lightbox (P1)
+- [ ] bug: ensure `showcaseMode` can render all specified showcase items immediately without needing to hit "load more" (P2)
+- [ ] docs: document component props and common patterns/configurations better (P2)
+- [ ] feat: support swiping in lightbox for touch devices (P2)
+- [ ] feat: remove "load more" button and auto-resolve all assets via recursive pagination on OpenSea API (P2)
