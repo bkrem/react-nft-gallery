@@ -1,6 +1,6 @@
 {
   "name": "react-nft-gallery",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React component to display your/anybody's NFTs as a gallery",
   "license": "MIT",
   "author": "Ben Kremer <contact@bkrem.dev>",
