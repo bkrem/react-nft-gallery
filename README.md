@@ -60,7 +60,7 @@ import { NftGallery } from 'react-nft-gallery';
 
 // ...
 
-return <NftGallery ownerAddress="0x2e675eeae4747c248bfddbafaa3a8a2fdddaa44b" />;
+return <NftGallery ownerAddress="vitalik.eth" />;
 ```
 
 ## API
