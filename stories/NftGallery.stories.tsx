@@ -24,6 +24,11 @@ DefaultWithLatestMints.args = {};
 export const DarkMode = Template.bind({});
 DarkMode.args = { darkMode: true } as NftGalleryProps;
 
+export const VitalikENS = Template.bind({});
+VitalikENS.args = {
+  ownerAddress: 'vitalik.eth',
+} as NftGalleryProps;
+
 export const NoLightbox = Template.bind({});
 NoLightbox.args = { hasLightbox: false } as NftGalleryProps;
 

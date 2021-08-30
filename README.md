@@ -39,8 +39,6 @@ The NFT assets for an address are resolved via the [OpenSea API](https://docs.op
 >   Please [open an issue](https://github.com/bkrem/react-nft-gallery/issues) in this case.
 > - The gallery may not render/behave as expected for your use case.
 >   Please [open an issue](https://github.com/bkrem/react-nft-gallery/issues) in this case.
-> - The top-level API (i.e. `NftGalleryProps`) may see breaking changes between releases until standard
->   semantic versioning is adopted from `v1.0.0` onwards.
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -70,7 +68,7 @@ return <NftGallery ownerAddress="0x2e675eeae4747c248bfddbafaa3a8a2fdddaa44b" />;
 ````ts
 interface NftGalleryProps {
   /**
-   * Ethereum address (`0x...`) for which the gallery should contain associated NFTs.
+   * Ethereum address (`0x...`) or ENS domain (`vitalik.eth`) for which the gallery should contain associated NFTs.
    * Required.
    */
   ownerAddress: string;
@@ -142,7 +140,7 @@ interface NftGalleryProps {
 
 ## Roadmap
 
-- [ ] feat: support ENS domain resolution in `ownerAddress` (P1)
+- [x] feat: support ENS domain resolution in `ownerAddress` ✅
 - [ ] feat: support keyboard navigation for lightbox (P1)
 - [ ] bug: ensure `showcaseMode` can render all specified showcase items immediately without needing to hit "load more" (P2)
 - [ ] docs: document component props and common patterns/configurations better (P2)

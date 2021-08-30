@@ -2,16 +2,19 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 import { GalleryItem } from './components/GalleryItem/GalleryItem';
 import { LoadMoreButton } from './components/LoadMoreButton';
 import { OpenseaAsset } from './types/OpenseaAsset';
-import { joinClassNames } from './utils';
+import { isEnsDomain, joinClassNames } from './utils';
+import {
+  fetchOpenseaAssets,
+  OPENSEA_API_OFFSET,
+  resolveEnsDomain,
+} from './api';
 
 import './styles/tailwind.css';
 import './styles/loader.css';
 
-const OPENSEA_API_OFFSET = 50;
-
 export interface NftGalleryProps {
   /**
-   * Ethereum address (`0x...`) for which the gallery should contain associated NFTs.
+   * Ethereum address (`0x...`) or ENS domain (`vitalik.eth`) for which the gallery should contain associated NFTs.
    * Required.
    */
   ownerAddress: string;
@@ -101,32 +104,15 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   const displayedAssets = showcaseMode ? showcaseAssets : assets;
 
-  const fetchAssets = async (
-    owner: NftGalleryProps['ownerAddress'],
-    offset = 0
-  ): Promise<OpenseaAsset[]> => {
-    try {
-      const result = await fetch(
-        `https://api.opensea.io/api/v1/assets?owner=${owner}&limit=50&offset=${offset}`
-      );
-      if (result.status !== 200) {
-        const error = await result.text();
-        throw new Error(error);
-      }
-      const { assets } = await result.json();
-      return assets;
-    } catch (error) {
-      console.error('fetchAssets failed:', error);
-      return [];
-    }
-  };
-
   const loadAssets = async (
-    owner: NftGalleryProps['ownerAddress'],
+    ownerAddress: NftGalleryProps['ownerAddress'],
     offset: number
   ) => {
     if (assets.length === 0) setIsLoading(true);
-    const rawAssets = await fetchAssets(owner, offset);
+    const resolvedOwner = isEnsDomain(ownerAddress)
+      ? await resolveEnsDomain(ownerAddress)
+      : ownerAddress;
+    const rawAssets = await fetchOpenseaAssets(resolvedOwner, offset);
     setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
     if (assets.length === 0) setIsLoading(false);

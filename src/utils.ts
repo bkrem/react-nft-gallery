@@ -5,3 +5,6 @@ export const joinClassNames = (...args: string[]) => args.join(' ').trim();
 
 export const getAssetTitle = (asset: OpenseaAsset) =>
   asset.name || `#${asset.token_id}`;
+
+export const isEnsDomain = (ownerAddress: string) =>
+  ownerAddress.includes('.eth');
