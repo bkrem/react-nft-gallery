@@ -2,7 +2,7 @@ import React from 'react';
 import { NftGalleryProps } from '../../NftGallery';
 import { OpenseaAsset } from '../../types/OpenseaAsset';
 import { getAssetTitle, joinClassNames } from '../../utils';
-import { Lightbox } from '../Lightbox/Lightbox';
+import { Lightbox, LightboxItem } from '../Lightbox/Lightbox';
 
 import './gallery-item.css';
 
@@ -22,6 +22,7 @@ export interface GalleryItemProps {
   index: number;
   metadataIsVisible: NftGalleryProps['metadataIsVisible'];
   hasLightbox: NftGalleryProps['hasLightbox'];
+  setLightboxItem: React.Dispatch<React.SetStateAction<LightboxItem>>;
   hasExternalLinks: NftGalleryProps['hasExternalLinks'];
   itemContainerStyle: NftGalleryProps['itemContainerStyle'];
   imgContainerStyle: NftGalleryProps['imgContainerStyle'];
@@ -32,6 +33,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   index,
   metadataIsVisible,
   hasLightbox,
+  setLightboxItem,
   hasExternalLinks,
   itemContainerStyle,
   imgContainerStyle,
@@ -91,7 +93,8 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     >
       <div style={imgContainerStyle} className="rnftg-item__img-wrapper">
         <a
-          className="perfundo__link rnftg-no-underline rnftg-text-black dark:rnftg-text-gray-200"
+          className="rnftg-no-underline rnftg-text-black dark:rnftg-text-gray-200"
+          onClick={() => setLightboxItem({ asset, index })}
           href={`#lightbox-${index}`}
         >
           {renderAssetMedia()}
@@ -129,7 +132,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
           </div>
         </div>
       )}
-      {hasLightbox && <Lightbox index={index} asset={asset} />}
+      {/* {hasLightbox && <Lightbox index={index} asset={asset} />} */}
     </article>
   );
 };

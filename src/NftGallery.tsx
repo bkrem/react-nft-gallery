@@ -11,6 +11,7 @@ import {
 
 import './styles/tailwind.css';
 import './styles/loader.css';
+import { Lightbox, LightboxItem } from './components/Lightbox/Lightbox';
 
 export interface NftGalleryProps {
   /**
@@ -101,6 +102,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const [currentOffset, setCurrentOffset] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [lightboxItem, setLightboxItem] = useState<LightboxItem>({
+    asset: {} as OpenseaAsset,
+    index: -1,
+  });
 
   const displayedAssets = showcaseMode ? showcaseAssets : assets;
 
@@ -175,6 +180,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   asset={asset}
                   metadataIsVisible={metadataIsVisible}
                   hasLightbox={hasLightbox}
+                  setLightboxItem={setLightboxItem}
                   hasExternalLinks={hasExternalLinks}
                   itemContainerStyle={itemContainerStyle}
                   imgContainerStyle={imgContainerStyle}
@@ -191,6 +197,9 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
               />
             )}
           </div>
+        )}
+        {hasLightbox && lightboxItem.index !== -1 && (
+          <Lightbox {...lightboxItem} setLightboxItem={setLightboxItem} />
         )}
       </div>
     </div>

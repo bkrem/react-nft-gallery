@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { OpenseaAsset } from '../../types/OpenseaAsset';
 import { getAssetTitle } from '../../utils';
 
 import './perfundo-lightbox.css';
 
-export interface LightboxProps {
+export interface LightboxItem {
   asset: OpenseaAsset;
   index: number;
 }
+export interface LightboxProps extends LightboxItem {
+  setLightboxItem: React.Dispatch<React.SetStateAction<LightboxItem>>;
+}
 
-export const Lightbox: React.FC<LightboxProps> = ({ asset, index }) => {
+export const Lightbox: React.FC<LightboxProps> = ({
+  asset,
+  index,
+  setLightboxItem,
+}) => {
+  const handleKeydownEvent = (evt: any) => {
+    console.log('keyPress', evt);
+  };
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKeydownEvent, false);
+
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeydownEvent, false);
+  //   };
+  // }, []);
   return (
     <div
       id={`lightbox-${index}`}
@@ -39,13 +56,20 @@ export const Lightbox: React.FC<LightboxProps> = ({ asset, index }) => {
       </a>
       <a
         className="perfundo__prev perfundo__control"
+        onClick={() => setLightboxItem({ asset, index: index - 1 })}
         href={`#lightbox-${index - 1}`}
       >
         Prev
       </a>
       <a
         className="perfundo__next perfundo__control"
-        href={`#lightbox-${index + 1}`}
+        onClick={(evt) => {
+          evt.stopPropagation();
+          const nextIndex = index + 1;
+          setLightboxItem({ asset, index: nextIndex });
+          window.location.assign(`#lightbox-${index + 1}`);
+        }}
+        // href={}
       >
         Next
       </a>
