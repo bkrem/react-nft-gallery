@@ -91,7 +91,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
     >
       <div style={imgContainerStyle} className="rnftg-item__img-wrapper">
         <a
-          className="perfundo__link rnftg-no-underline rnftg-text-black dark:rnftg-text-gray-200"
+          className="rnftg-no-underline rnftg-text-black dark:rnftg-text-gray-200"
           href={`#lightbox-${index}`}
         >
           {renderAssetMedia()}
