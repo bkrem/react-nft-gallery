@@ -101,6 +101,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const [currentOffset, setCurrentOffset] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const displayedAssets = showcaseMode ? showcaseAssets : assets;
 
@@ -128,6 +129,43 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     setShowcaseAssets(nextShowcaseAssets);
   };
 
+  // TODO: Move into `Lightbox` component once its refactored to being a singleton.
+  const handleKeydownEvent = (evt: KeyboardEvent) => {
+    const hasActiveLightbox =
+      window.location.hash.includes('lightbox-') &&
+      window.location.hash !== '#lightbox-untarget';
+
+    if (!hasActiveLightbox) {
+      return;
+    }
+
+    const decreaseLightboxIndex = () => {
+      // Do nothing if we're at minimum index already.
+      if (lightboxIndex === 0) return;
+      const nextIndex = lightboxIndex - 1;
+      setLightboxIndex(nextIndex);
+      window.location.assign(`#lightbox-${nextIndex}`);
+    };
+    const increaseLightboxIndex = () => {
+      // Do nothing if we're at maximum index already.
+      if (lightboxIndex === assets.length - 1) return;
+      const nextIndex = lightboxIndex + 1;
+      setLightboxIndex(nextIndex);
+      window.location.assign(`#lightbox-${nextIndex}`);
+    };
+
+    switch (evt.key) {
+      case 'ArrowLeft':
+        return decreaseLightboxIndex();
+      case 'ArrowRight':
+        return increaseLightboxIndex();
+      case 'Escape':
+        return window.location.assign(`#lightbox-untarget`);
+      default:
+        break;
+    }
+  };
+
   useEffect(() => {
     loadAssets(ownerAddress, currentOffset);
   }, [ownerAddress, currentOffset]);
@@ -137,6 +175,13 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       updateShowcaseAssets(assets, showcaseItemIds);
     }
   }, [assets, showcaseMode, showcaseItemIds]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeydownEvent);
+    return () => {
+      document.removeEventListener('keydown', handleKeydownEvent);
+    };
+  }, [assets, lightboxIndex]);
 
   return (
     <div
@@ -175,6 +220,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   asset={asset}
                   metadataIsVisible={metadataIsVisible}
                   hasLightbox={hasLightbox}
+                  setLightboxIndex={setLightboxIndex}
                   hasExternalLinks={hasExternalLinks}
                   itemContainerStyle={itemContainerStyle}
                   imgContainerStyle={imgContainerStyle}

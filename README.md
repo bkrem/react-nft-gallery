@@ -141,8 +141,8 @@ interface NftGalleryProps {
 ## Roadmap
 
 - [x] feat: support ENS domain resolution in `ownerAddress` ✅
-- [ ] feat: support keyboard navigation for lightbox (P1)
-- [ ] bug: ensure `showcaseMode` can render all specified showcase items immediately without needing to hit "load more" (P2)
+- [x] feat: support keyboard navigation for lightbox
+- [ ] feat: remove "load more" button and auto-resolve all assets via recursive pagination on OpenSea API (P1)
+- [ ] bug: ensure `showcaseMode` can render all specified showcase items immediately without needing to hit "load more" (P1)
 - [ ] docs: document component props and common patterns/configurations better (P2)
 - [ ] feat: support swiping in lightbox for touch devices (P2)
-- [ ] feat: remove "load more" button and auto-resolve all assets via recursive pagination on OpenSea API (P2)

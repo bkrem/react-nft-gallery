@@ -22,6 +22,7 @@ export interface GalleryItemProps {
   index: number;
   metadataIsVisible: NftGalleryProps['metadataIsVisible'];
   hasLightbox: NftGalleryProps['hasLightbox'];
+  setLightboxIndex: (nextIndex: number) => void;
   hasExternalLinks: NftGalleryProps['hasExternalLinks'];
   itemContainerStyle: NftGalleryProps['itemContainerStyle'];
   imgContainerStyle: NftGalleryProps['imgContainerStyle'];
@@ -32,6 +33,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
   index,
   metadataIsVisible,
   hasLightbox,
+  setLightboxIndex,
   hasExternalLinks,
   itemContainerStyle,
   imgContainerStyle,
@@ -92,6 +94,7 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
       <div style={imgContainerStyle} className="rnftg-item__img-wrapper">
         <a
           className="rnftg-no-underline rnftg-text-black dark:rnftg-text-gray-200"
+          onClick={() => setLightboxIndex(index)}
           href={`#lightbox-${index}`}
         >
           {renderAssetMedia()}
@@ -129,7 +132,13 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({
           </div>
         </div>
       )}
-      {hasLightbox && <Lightbox index={index} asset={asset} />}
+      {hasLightbox && (
+        <Lightbox
+          index={index}
+          asset={asset}
+          setLightboxIndex={setLightboxIndex}
+        />
+      )}
     </article>
   );
 };
