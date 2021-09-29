@@ -99,6 +99,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const [assets, setAssets] = useState([] as OpenseaAsset[]);
   const [showcaseAssets, setShowcaseAssets] = useState([] as OpenseaAsset[]);
   const [currentOffset, setCurrentOffset] = useState(0);
+  // @ts-ignore
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -107,15 +108,29 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   const loadAssets = async (
     ownerAddress: NftGalleryProps['ownerAddress'],
+    // @ts-ignore
     offset: number
   ) => {
     if (assets.length === 0) setIsLoading(true);
     const resolvedOwner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
-    const rawAssets = await fetchOpenseaAssets(resolvedOwner, offset);
-    setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
-    setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
+
+    let shouldFetch = true;
+    let tempOffset = 0;
+
+    while (shouldFetch) {
+      console.log(shouldFetch, tempOffset);
+      const rawAssets = await fetchOpenseaAssets(resolvedOwner, tempOffset);
+      console.log(rawAssets.length);
+      setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
+      tempOffset += OPENSEA_API_OFFSET;
+      if (rawAssets.length < OPENSEA_API_OFFSET) {
+        shouldFetch = false;
+      }
+    }
+
+    // setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
     if (assets.length === 0) setIsLoading(false);
   };
 
