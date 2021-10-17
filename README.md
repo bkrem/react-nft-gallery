@@ -122,6 +122,12 @@ interface NftGalleryProps {
   isInline?: boolean;
 
   /**
+   * Disables lazy loading and shows a "Load more" button to fetch the next set of gallery items.
+   * Defaults to `false`.
+   */
+  hasLoadMoreButton?: boolean;
+
+  /**
    * Overrides the default styling of the gallery's container.
    */
   galleryContainerStyle?: CSSProperties;
@@ -142,7 +148,7 @@ interface NftGalleryProps {
 
 - [x] feat: support ENS domain resolution in `ownerAddress` ✅
 - [x] feat: support keyboard navigation for lightbox
-- [ ] feat: remove "load more" button and auto-resolve all assets via recursive pagination on OpenSea API (P1)
+- [x] feat: remove "load more" button and auto-resolve all assets via recursive pagination on OpenSea API (P1)
 - [ ] bug: ensure `showcaseMode` can render all specified showcase items immediately without needing to hit "load more" (P1)
 - [ ] docs: document component props and common patterns/configurations better (P2)
 - [ ] feat: support swiping in lightbox for touch devices (P2)
