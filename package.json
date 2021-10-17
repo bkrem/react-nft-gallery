@@ -74,6 +74,9 @@
   "peerDependencies": {
     "react": ">=16"
   },
+  "dependencies": {
+    "react-intersection-observer": "^8.32.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.14.8",
     "@size-limit/preset-small-lib": "^5.0.2",
@@ -102,6 +105,5 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.3.0",
     "typescript": "^4.3.5"
-  },
-  "dependencies": {}
+  }
 }

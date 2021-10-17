@@ -1,4 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
+import InView from 'react-intersection-observer';
+
 import { GalleryItem } from './components/GalleryItem/GalleryItem';
 import { LoadMoreButton } from './components/LoadMoreButton';
 import { OpenseaAsset } from './types/OpenseaAsset';
@@ -68,6 +70,12 @@ export interface NftGalleryProps {
   isInline?: boolean;
 
   /**
+   * Disables lazy loading and shows a "Load more" button to fetch the next set of gallery items.
+   * Defaults to `false`.
+   */
+  hasLoadMoreButton?: boolean;
+
+  /**
    * Overrides the default styling of the gallery's container.
    */
   galleryContainerStyle?: CSSProperties;
@@ -92,6 +100,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   hasLightbox = true,
   hasExternalLinks = true,
   isInline = false,
+  hasLoadMoreButton = false,
   galleryContainerStyle,
   itemContainerStyle,
   imgContainerStyle,
@@ -213,21 +222,47 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                   : 'rnftg-grid-flow-row rnftg-grid-cols-1 md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
               )}
             >
-              {displayedAssets.map((asset, index) => (
-                <GalleryItem
-                  key={asset.id}
-                  index={index}
-                  asset={asset}
-                  metadataIsVisible={metadataIsVisible}
-                  hasLightbox={hasLightbox}
-                  setLightboxIndex={setLightboxIndex}
-                  hasExternalLinks={hasExternalLinks}
-                  itemContainerStyle={itemContainerStyle}
-                  imgContainerStyle={imgContainerStyle}
-                />
-              ))}
+              {displayedAssets.map((asset, index) => {
+                const isLastItemInPage = (index + 1) % OPENSEA_API_OFFSET === 0;
+                return isLastItemInPage ? (
+                  <InView
+                    triggerOnce
+                    onChange={(isInView) => {
+                      if (!hasLoadMoreButton && isInView) {
+                        setCurrentOffset(
+                          (prevOffset) => prevOffset + OPENSEA_API_OFFSET
+                        );
+                      }
+                    }}
+                    key={asset.id}
+                  >
+                    <GalleryItem
+                      index={index}
+                      asset={asset}
+                      metadataIsVisible={metadataIsVisible}
+                      hasLightbox={hasLightbox}
+                      setLightboxIndex={setLightboxIndex}
+                      hasExternalLinks={hasExternalLinks}
+                      itemContainerStyle={itemContainerStyle}
+                      imgContainerStyle={imgContainerStyle}
+                    />
+                  </InView>
+                ) : (
+                  <GalleryItem
+                    key={asset.id}
+                    index={index}
+                    asset={asset}
+                    metadataIsVisible={metadataIsVisible}
+                    hasLightbox={hasLightbox}
+                    setLightboxIndex={setLightboxIndex}
+                    hasExternalLinks={hasExternalLinks}
+                    itemContainerStyle={itemContainerStyle}
+                    imgContainerStyle={imgContainerStyle}
+                  />
+                );
+              })}
             </div>
-            {canLoadMore && (
+            {hasLoadMoreButton && canLoadMore && (
               <LoadMoreButton
                 onClick={() => {
                   setCurrentOffset(
