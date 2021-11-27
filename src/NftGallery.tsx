@@ -118,7 +118,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     ownerAddress: NftGalleryProps['ownerAddress'],
     offset: number
   ) => {
-    if (assets.length === 0) setIsLoading(true);
+    setIsLoading(true);
     const resolvedOwner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
@@ -131,8 +131,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const loadShowcaseAssets = async (
     ownerAddress: NftGalleryProps['ownerAddress']
   ) => {
-    if (assets.length === 0) setIsLoading(true);
-
+    setIsLoading(true);
     // Stop if we already have 1000+ items in play.
     const MAX_OFFSET = OPENSEA_API_OFFSET * 20;
     const resolvedOwner = isEnsDomain(ownerAddress)
@@ -249,7 +248,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
           isInline ? 'rnftg--inline' : ''
         )}
       >
-        {isLoading ? (
+        {displayedAssets.length === 0 && isLoading ? (
           <div className="rnftg-flex rnftg-justify-center rnftg-items-center rnftg-h-full dark:rnftg-text-gray-200">
             <div className="rnftg-loader rnftg-text-gray-800 dark:rnftg-text-gray-200"></div>
           </div>
