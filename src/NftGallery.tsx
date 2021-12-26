@@ -12,7 +12,7 @@ import {
 } from './api';
 
 import './styles/tailwind.css';
-import './styles/loader.css';
+import { SkeletonCard } from './components/SkeletonCard';
 
 export interface NftGalleryProps {
   /**
@@ -237,6 +237,11 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     };
   }, [assets, lightboxIndex]);
 
+  const renderSkeletonCards = () =>
+    new Array(8)
+      .fill(0)
+      .map((_, index) => <SkeletonCard key={'placeholder-' + index} />);
+
   return (
     <div
       className={joinClassNames(darkMode ? 'rnftg-dark' : '', 'rnftg-h-full')}
@@ -248,34 +253,45 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
           isInline ? 'rnftg--inline' : ''
         )}
       >
-        {displayedAssets.length === 0 && isLoading ? (
-          <div className="rnftg-flex rnftg-justify-center rnftg-items-center rnftg-h-full dark:rnftg-text-gray-200">
-            <div className="rnftg-loader rnftg-text-gray-800 dark:rnftg-text-gray-200"></div>
-          </div>
-        ) : (
+        <div
+          className={joinClassNames(
+            'rnftg-flex',
+            isInline ? 'rnftg-flex-row' : 'rnftg-flex-col'
+          )}
+        >
           <div
             className={joinClassNames(
-              'rnftg-flex',
-              isInline ? 'rnftg-flex-row' : 'rnftg-flex-col'
+              'rnftg-grid rnftg-gap-6',
+              isInline
+                ? 'rnftg-grid-flow-col'
+                : 'rnftg-grid-flow-row rnftg-grid-cols-1 md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
             )}
           >
-            <div
-              className={joinClassNames(
-                'rnftg-grid rnftg-gap-6',
-                isInline
-                  ? 'rnftg-grid-flow-col'
-                  : 'rnftg-grid-flow-row rnftg-grid-cols-1 md:rnftg-grid-cols-2 lg:rnftg-grid-cols-3 xl:rnftg-grid-cols-4'
-              )}
-            >
-              {displayedAssets.map((asset, index) => {
-                const isLastItemInPage = (index + 1) % OPENSEA_API_OFFSET === 0;
-                return isLastItemInPage ? (
-                  <InView
-                    triggerOnce
-                    onChange={onLastItemInView}
-                    key={asset.id}
-                  >
+            {displayedAssets.length === 0 && isLoading
+              ? renderSkeletonCards()
+              : displayedAssets.map((asset, index) => {
+                  const isLastItemInPage =
+                    (index + 1) % OPENSEA_API_OFFSET === 0;
+                  return isLastItemInPage ? (
+                    <InView
+                      triggerOnce
+                      onChange={onLastItemInView}
+                      key={asset.id}
+                    >
+                      <GalleryItem
+                        index={index}
+                        asset={asset}
+                        metadataIsVisible={metadataIsVisible}
+                        hasLightbox={hasLightbox}
+                        setLightboxIndex={setLightboxIndex}
+                        hasExternalLinks={hasExternalLinks}
+                        itemContainerStyle={itemContainerStyle}
+                        imgContainerStyle={imgContainerStyle}
+                      />
+                    </InView>
+                  ) : (
                     <GalleryItem
+                      key={asset.id}
                       index={index}
                       asset={asset}
                       metadataIsVisible={metadataIsVisible}
@@ -285,33 +301,19 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                       itemContainerStyle={itemContainerStyle}
                       imgContainerStyle={imgContainerStyle}
                     />
-                  </InView>
-                ) : (
-                  <GalleryItem
-                    key={asset.id}
-                    index={index}
-                    asset={asset}
-                    metadataIsVisible={metadataIsVisible}
-                    hasLightbox={hasLightbox}
-                    setLightboxIndex={setLightboxIndex}
-                    hasExternalLinks={hasExternalLinks}
-                    itemContainerStyle={itemContainerStyle}
-                    imgContainerStyle={imgContainerStyle}
-                  />
-                );
-              })}
-            </div>
-            {hasLoadMoreButton && canLoadMore && (
-              <LoadMoreButton
-                onClick={() => {
-                  setCurrentOffset(
-                    (prevOffset) => prevOffset + OPENSEA_API_OFFSET
                   );
-                }}
-              />
-            )}
+                })}
           </div>
-        )}
+          {hasLoadMoreButton && canLoadMore && (
+            <LoadMoreButton
+              onClick={() => {
+                setCurrentOffset(
+                  (prevOffset) => prevOffset + OPENSEA_API_OFFSET
+                );
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
