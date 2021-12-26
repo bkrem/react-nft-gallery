@@ -4,7 +4,7 @@ import { NftGallery, NftGalleryProps } from '../src/';
 import { version } from '../package.json';
 
 const meta: Meta = {
-  title: 'NftGallery',
+  title: `NftGallery v${version}`,
   component: NftGallery,
   parameters: {
     layout: 'fullscreen',
