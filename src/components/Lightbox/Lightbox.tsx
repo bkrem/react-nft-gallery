@@ -7,13 +7,15 @@ import './perfundo-lightbox.css';
 export interface LightboxProps {
   asset: OpenseaAsset;
   index: number;
-  setLightboxIndex: (nextIndex: number) => void;
+  increaseLightboxIndex: () => void;
+  decreaseLightboxIndex: () => void;
 }
 
 export const Lightbox: React.FC<LightboxProps> = ({
   asset,
   index,
-  setLightboxIndex,
+  increaseLightboxIndex,
+  decreaseLightboxIndex,
 }) => {
   return (
     <div
@@ -45,8 +47,9 @@ export const Lightbox: React.FC<LightboxProps> = ({
       <a
         className="perfundo__prev perfundo__control"
         onClick={(evt) => {
+          evt.preventDefault();
           evt.stopPropagation();
-          setLightboxIndex(index - 1);
+          decreaseLightboxIndex();
         }}
         href={`#lightbox-${index - 1}`}
       >
@@ -55,8 +58,9 @@ export const Lightbox: React.FC<LightboxProps> = ({
       <a
         className="perfundo__next perfundo__control"
         onClick={(evt) => {
+          evt.preventDefault();
           evt.stopPropagation();
-          setLightboxIndex(index + 1);
+          increaseLightboxIndex();
         }}
         href={`#lightbox-${index + 1}`}
       >

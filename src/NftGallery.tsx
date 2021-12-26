@@ -13,6 +13,7 @@ import {
 
 import './styles/tailwind.css';
 import { SkeletonCard } from './components/SkeletonCard';
+import { useLightboxNavigation } from './hooks/useLightboxNavigation';
 
 export interface NftGalleryProps {
   /**
@@ -110,7 +111,13 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const [currentOffset, setCurrentOffset] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const {
+    lightboxIndex,
+    setLightboxIndex,
+    decreaseLightboxIndex,
+    increaseLightboxIndex,
+  } = useLightboxNavigation(assets.length - 1);
 
   const displayedAssets = showcaseMode ? showcaseAssets : assets;
 
@@ -186,21 +193,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       return;
     }
 
-    const decreaseLightboxIndex = () => {
-      // Do nothing if we're at minimum index already.
-      if (lightboxIndex === 0) return;
-      const nextIndex = lightboxIndex - 1;
-      setLightboxIndex(nextIndex);
-      window.location.assign(`#lightbox-${nextIndex}`);
-    };
-    const increaseLightboxIndex = () => {
-      // Do nothing if we're at maximum index already.
-      if (lightboxIndex === assets.length - 1) return;
-      const nextIndex = lightboxIndex + 1;
-      setLightboxIndex(nextIndex);
-      window.location.assign(`#lightbox-${nextIndex}`);
-    };
-
     switch (evt.key) {
       case 'ArrowLeft':
         return decreaseLightboxIndex();
@@ -270,6 +262,21 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
             {displayedAssets.length === 0 && isLoading
               ? renderSkeletonCards()
               : displayedAssets.map((asset, index) => {
+                  const item = (
+                    <GalleryItem
+                      key={asset.id}
+                      index={index}
+                      asset={asset}
+                      metadataIsVisible={metadataIsVisible}
+                      hasLightbox={hasLightbox}
+                      setLightboxIndex={setLightboxIndex}
+                      increaseLightboxIndex={increaseLightboxIndex}
+                      decreaseLightboxIndex={decreaseLightboxIndex}
+                      hasExternalLinks={hasExternalLinks}
+                      itemContainerStyle={itemContainerStyle}
+                      imgContainerStyle={imgContainerStyle}
+                    />
+                  );
                   const isLastItemInPage =
                     (index + 1) % OPENSEA_API_OFFSET === 0;
                   return isLastItemInPage ? (
@@ -278,29 +285,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
                       onChange={onLastItemInView}
                       key={asset.id}
                     >
-                      <GalleryItem
-                        index={index}
-                        asset={asset}
-                        metadataIsVisible={metadataIsVisible}
-                        hasLightbox={hasLightbox}
-                        setLightboxIndex={setLightboxIndex}
-                        hasExternalLinks={hasExternalLinks}
-                        itemContainerStyle={itemContainerStyle}
-                        imgContainerStyle={imgContainerStyle}
-                      />
+                      {item}
                     </InView>
                   ) : (
-                    <GalleryItem
-                      key={asset.id}
-                      index={index}
-                      asset={asset}
-                      metadataIsVisible={metadataIsVisible}
-                      hasLightbox={hasLightbox}
-                      setLightboxIndex={setLightboxIndex}
-                      hasExternalLinks={hasExternalLinks}
-                      itemContainerStyle={itemContainerStyle}
-                      imgContainerStyle={imgContainerStyle}
-                    />
+                    item
                   );
                 })}
           </div>
