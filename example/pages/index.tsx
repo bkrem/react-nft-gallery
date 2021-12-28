@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { NftGallery } from 'react-nft-gallery';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { providers } from 'ethers';
-import { Button, Flex, Heading, Input, VStack } from '@chakra-ui/react';
+import { Button, Flex, Heading, Input, Text, VStack } from '@chakra-ui/react';
 import debounce from 'lodash.debounce';
 
 const Home: NextPage = () => {
+  const [wcProvider, setWcProvider] = useState<WalletConnectProvider>();
   const [web3Provider, setWeb3Provider] = useState<providers.Web3Provider>();
   const [walletAddr, setWalletAddr] = useState<string>();
 
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
       const wc = new WalletConnectProvider({
         infuraId: '0fb70b3861104a29bb2f497a45cb34eb',
       });
+      setWcProvider(wc);
       setWeb3Provider(new providers.Web3Provider(wc));
       await wc.enable();
     } catch (error) {
@@ -24,7 +26,12 @@ const Home: NextPage = () => {
     }
   };
 
+  const disconnectWallet = async () => {
+    await wcProvider?.disconnect();
+  };
+
   const onReset = () => {
+    setWcProvider(undefined);
     setWeb3Provider(undefined);
     setWalletAddr(undefined);
   };
@@ -62,11 +69,27 @@ const Home: NextPage = () => {
 
       <main>
         <Heading as="h1" textAlign="center">
-          react-nft-gallery
+          🖼 react-nft-gallery
         </Heading>
-        <Flex justifyContent="center">
-          {hasWalletAddr && <Button onClick={onReset}>Reset</Button>}
-        </Flex>
+        {hasWalletAddr && (
+          <VStack alignItems="flex-end" p="8">
+            <Button variant="outline">
+              Wallet: {walletAddr!.length ? walletAddr : '<none>'}
+            </Button>
+            <Button onClick={onReset}>Change Wallet</Button>
+            {web3Provider && (
+              <Button
+                onClick={() => {
+                  disconnectWallet();
+                  onReset();
+                }}
+              >
+                Disconnect Wallet
+              </Button>
+            )}
+          </VStack>
+        )}
+
         {hasWalletAddr ? (
           <NftGallery ownerAddress={walletAddr!} darkMode />
         ) : (
