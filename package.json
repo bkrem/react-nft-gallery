@@ -24,7 +24,7 @@
     "build": "NODE_ENV=production tsdx build",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
-    "prepare": "NODE_ENV=production tsdx build",
+    "prepare": "husky install && NODE_ENV=production tsdx build",
     "release": "np",
     "postpublish": "yarn deploy-storybook",
     "size": "size-limit",
@@ -35,11 +35,6 @@
   },
   "engines": {
     "node": ">=12"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "prettier": {
     "printWidth": 80,
