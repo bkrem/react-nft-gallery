@@ -77,7 +77,7 @@ const Home: NextPage = () => {
 
       <main>
         <Heading as="h1" textAlign="center">
-          🖼 react-nft-gallery
+          🖼 ✨ react-nft-gallery
         </Heading>
         {hasWalletAddr && (
           <VStack alignItems="flex-end" p="8">
@@ -102,14 +102,14 @@ const Home: NextPage = () => {
           <NftGallery ownerAddress={walletAddr!} darkMode />
         ) : (
           <VStack
-            maxWidth="33%"
             height="100vh"
             margin="auto"
             justifyContent="center"
             alignItems="center"
             spacing="6"
+            px="6"
           >
-            <Button onClick={connectWallet} px="6">
+            <Button onClick={connectWallet}>
               <Image
                 src="/walletconnect-logo.svg"
                 alt="WalletConnect Logo"
@@ -120,7 +120,8 @@ const Home: NextPage = () => {
             </Button>
             <span>OR</span>
             <Input
-              placeholder="Enter ETH address (0x...) or ENS domain (vitalik.eth)"
+              maxWidth={{ base: '100%', md: '50%', lg: '33%' }}
+              placeholder="ENS domain (vitalik.eth) or 0x..."
               onChange={debounce(
                 (evt) => setWalletAddr(evt.target.value),
                 1000
