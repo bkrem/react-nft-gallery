@@ -4,7 +4,15 @@ import { useState, useEffect } from 'react';
 import { NftGallery } from 'react-nft-gallery';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { providers } from 'ethers';
-import { Button, Flex, Heading, Input, Text, VStack } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Input,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import debounce from 'lodash.debounce';
 
 const Home: NextPage = () => {
@@ -59,7 +67,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>react-nft-gallery Demo</title>
+        <title>react-nft-gallery</title>
         <meta
           name="description"
           content="Demo application for react-nft-gallery"
@@ -101,7 +109,15 @@ const Home: NextPage = () => {
             alignItems="center"
             spacing="6"
           >
-            <Button onClick={connectWallet}>Connect Wallet</Button>
+            <Button onClick={connectWallet} px="6">
+              <Image
+                src="/walletconnect-logo.svg"
+                alt="WalletConnect Logo"
+                height="4"
+                pr="2"
+              />
+              Connect Wallet
+            </Button>
             <span>OR</span>
             <Input
               placeholder="Enter ETH address (0x...) or ENS domain (vitalik.eth)"
