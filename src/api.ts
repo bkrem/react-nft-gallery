@@ -32,15 +32,26 @@ export const resolveEnsDomain = async (
   }
 };
 
-export const fetchOpenseaAssets = async (
-  owner: string | null,
-  offset = 0
-): Promise<OpenseaAsset[]> => {
+export const fetchOpenseaAssets = async ({
+  owner,
+  offset,
+  apiKey,
+}: {
+  owner: string | null;
+  offset: number;
+  apiKey?: string;
+}): Promise<OpenseaAsset[]> => {
   try {
+    const apiUrl = apiKey
+      ? `https://api.opensea.io/api/v1/assets?limit=50&offset=${offset}${
+          owner ? '&owner=' + owner : ''
+        }`
+      : `https://api.opensea.io/api/v1/assets?${
+          owner ? '&owner=' + owner : ''
+        }`;
     const result = await fetch(
-      `https://api.opensea.io/api/v1/assets?limit=50&offset=${offset}${
-        owner ? '&owner=' + owner : ''
-      }`
+      apiUrl,
+      apiKey ? { headers: { 'X-API-KEY': apiKey } } : {}
     );
     if (result.status !== 200) {
       const error = await result.text();

@@ -40,10 +40,21 @@ The NFT assets for an address are resolved via the [OpenSea API](https://docs.op
 > - The gallery may not render/behave as expected for your use case.
 >   Please [open an issue](https://github.com/bkrem/react-nft-gallery/issues) in this case.
 
+- [OpenSea API Key](#opensea-api-key)
 - [Installation](#installation)
 - [Usage](#usage)
 - [API](#api)
 - [Roadmap](#roadmap)
+
+## OpenSea API Key
+
+OpenSea has recently added the requirement for an `X-API-KEY` header to be passed for any non-trivial
+requests to their [`/assets` endpoint](https://docs.opensea.io/reference/getting-assets).
+By default, `react-nft-gallery` can now only fetch the first 20 assets for any provided `ownerAddress`.
+
+The gallery's full capabilities are available by passing an OpenSea API key as the `openseaApiKey` prop.
+
+To request an API key, please consult the [API key form on the OpenSea docs](https://docs.opensea.io/reference/request-an-api-key).
 
 ## Installation
 
@@ -72,6 +83,12 @@ interface NftGalleryProps {
    * Required.
    */
   ownerAddress: string;
+
+  /**
+   * OpenSea API key, which is required for non-trivial use cases of the OpenSea API's `/assets` endpoint.
+   * See the endpoint's documentation for more information: https://docs.opensea.io/reference/getting-assets
+   */
+  openseaApiKey?: string;
 
   /**
    * Display asset metadata underneath the NFT.

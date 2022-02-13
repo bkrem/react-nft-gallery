@@ -23,6 +23,12 @@ export interface NftGalleryProps {
   ownerAddress: string;
 
   /**
+   * OpenSea API key, which is required for non-trivial use cases of the OpenSea API's `/assets` endpoint.
+   * See the endpoint's documentation for more information: https://docs.opensea.io/reference/getting-assets
+   */
+  openseaApiKey?: string;
+
+  /**
    * Display asset metadata underneath the NFT.
    * Defaults to `true`.
    */
@@ -94,6 +100,7 @@ export interface NftGalleryProps {
 
 export const NftGallery: React.FC<NftGalleryProps> = ({
   ownerAddress = '',
+  openseaApiKey = '',
   darkMode = false,
   metadataIsVisible = true,
   showcaseMode = false,
@@ -123,25 +130,31 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   const loadAssets = async (
     ownerAddress: NftGalleryProps['ownerAddress'],
+    apiKey: NftGalleryProps['openseaApiKey'],
     offset: number
   ) => {
     setIsLoading(true);
-    const resolvedOwner = isEnsDomain(ownerAddress)
+    const owner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
-    const rawAssets = await fetchOpenseaAssets(resolvedOwner, offset);
+    const rawAssets = await fetchOpenseaAssets({
+      owner,
+      apiKey,
+      offset,
+    });
     setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
     setIsLoading(false);
   };
 
   const loadShowcaseAssets = async (
-    ownerAddress: NftGalleryProps['ownerAddress']
+    ownerAddress: NftGalleryProps['ownerAddress'],
+    apiKey: NftGalleryProps['openseaApiKey']
   ) => {
     setIsLoading(true);
     // Stop if we already have 1000+ items in play.
     const MAX_OFFSET = OPENSEA_API_OFFSET * 20;
-    const resolvedOwner = isEnsDomain(ownerAddress)
+    const owner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
 
@@ -151,7 +164,11 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     // Grab all assets of this address to filter down to showcase-only.
     // TODO: optimise this to exit as soon as all showcase items have been resolved.
     while (shouldFetch) {
-      const rawAssets = await fetchOpenseaAssets(resolvedOwner, currentOffset);
+      const rawAssets = await fetchOpenseaAssets({
+        owner,
+        apiKey,
+        offset: currentOffset,
+      });
       setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
       currentOffset += OPENSEA_API_OFFSET;
       if (rawAssets.length !== 0) setIsLoading(false);
@@ -208,11 +225,11 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   // Handles fetching of assets via OpenSea API.
   useEffect(() => {
     if (showcaseMode) {
-      loadShowcaseAssets(ownerAddress);
+      loadShowcaseAssets(ownerAddress, openseaApiKey);
     } else {
-      loadAssets(ownerAddress, currentOffset);
+      loadAssets(ownerAddress, openseaApiKey, currentOffset);
     }
-  }, [ownerAddress, currentOffset]);
+  }, [showcaseMode, ownerAddress, openseaApiKey, currentOffset]);
 
   // Isolates assets specified for showcase mode into their own collection whenever `assets` changes.
   useEffect(() => {
