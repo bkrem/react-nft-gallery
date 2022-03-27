@@ -29,6 +29,15 @@ VitalikENS.args = {
   ownerAddress: 'vitalik.eth',
 } as NftGalleryProps;
 
+export const CityDAOCustomApi = Template.bind({});
+CityDAOCustomApi.args = {
+  ownerAddress: 'daocity.eth',
+  apiUrl: 'http://opensea-api-proxy.vercel.app',
+  isProxyApi: true,
+  darkMode: true,
+  autoRetry: true,
+} as NftGalleryProps;
+
 export const NoLightbox = Template.bind({});
 NoLightbox.args = { hasLightbox: false } as NftGalleryProps;
 
@@ -38,6 +47,9 @@ Inline.args = { isInline: true } as NftGalleryProps;
 export const ThreeArrowsCapitalShowAll = Template.bind({});
 ThreeArrowsCapitalShowAll.args = {
   ownerAddress: '0x2e675eeae4747c248bfddbafaa3a8a2fdddaa44b',
+  apiUrl: 'http://opensea-api-proxy.vercel.app',
+  isProxyApi: true,
+  darkMode: true,
 } as NftGalleryProps;
 
 const fidenzaContract = '0xa7d8d9ef8d8ce8992df33d8b8cf4aebabd5bd270';

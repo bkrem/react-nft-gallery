@@ -35,6 +35,7 @@ The NFT assets for an address are resolved via the [OpenSea API](https://docs.op
 >
 > This means:
 >
+> - The gallery may see breaking changes between minor versions until `v1.0.0` is released.
 > - The gallery may not always render/behave as expected across different browsers & browser versions.
 >   Please [open an issue](https://github.com/bkrem/react-nft-gallery/issues) in this case.
 > - The gallery may not render/behave as expected for your use case.
@@ -43,6 +44,7 @@ The NFT assets for an address are resolved via the [OpenSea API](https://docs.op
 - [OpenSea API Key](#opensea-api-key)
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Using a custom API endpoint](#using-a-custom-api-endpoint)
 - [API](#api)
 - [Roadmap](#roadmap)
 
@@ -52,7 +54,7 @@ OpenSea has recently added the requirement for an `X-API-KEY` header to be passe
 requests to their [`/assets` endpoint](https://docs.opensea.io/reference/getting-assets).
 By default, `react-nft-gallery` can now only fetch the first 20 assets for any provided `ownerAddress`.
 
-The gallery's full capabilities are available by passing an OpenSea API key as the `openseaApiKey` prop.
+The gallery's full capabilities are available by passing an OpenSea API key as the `openseaApiKey` prop, or by [using a custom API endpoint](#using-a-custom-api-endpoint).
 
 To request an API key, please consult the [API key form on the OpenSea docs](https://docs.opensea.io/reference/request-an-api-key).
 
@@ -74,6 +76,27 @@ import { NftGallery } from 'react-nft-gallery';
 return <NftGallery ownerAddress="vitalik.eth" />;
 ```
 
+### Using a custom API endpoint
+
+To use a custom API endpoint, pass it via the `apiUrl` prop.
+
+If the endpoint injects an OpenSea API key, set the `isProxyApi` prop to `true`.
+This allows for paginated requests without exposing the OpenSea API key in the client via `openseaApiKey`:
+
+```tsx
+import { NftGallery } from 'react-nft-gallery';
+
+// ...
+
+return (
+  <NftGallery
+    ownerAddress="vitalik.eth"
+    apiUrl="https://your-opensea-api-proxy.vercel.app"
+    isProxyApi={true}
+  />
+);
+```
+
 ## API
 
 ````ts
@@ -89,6 +112,22 @@ interface NftGalleryProps {
    * See the endpoint's documentation for more information: https://docs.opensea.io/reference/getting-assets
    */
   openseaApiKey?: string;
+
+  /**
+   * Set to `true` when using a proxy API to hide the OpenSea API key.
+   * Otherwise the gallery disables pagination if `openseaApiKey` is also not provided.
+   */
+  isProxyApi?: boolean;
+
+  /**
+   * Set a custom API URL.
+   */
+  apiUrl?: string;
+
+  /**
+   * Auto retry (max. 10 times) after an API request failed.
+   */
+  autoRetry?: boolean;
 
   /**
    * Display asset metadata underneath the NFT.
@@ -163,7 +202,7 @@ interface NftGalleryProps {
 
 ## Roadmap
 
-- [x] feat: support ENS domain resolution in `ownerAddress` ✅
+- [x] feat: support ENS domain resolution in `ownerAddress`
 - [x] feat: support keyboard navigation for lightbox
 - [x] feat: remove "load more" button and auto-resolve all assets via recursive pagination on OpenSea API (P1)
 - [x] feat: use card placeholders instead of spinner for loading phase (P1)
