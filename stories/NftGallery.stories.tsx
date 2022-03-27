@@ -29,6 +29,14 @@ VitalikENS.args = {
   ownerAddress: 'vitalik.eth',
 } as NftGalleryProps;
 
+export const CityDAOCustomApi = Template.bind({});
+CityDAOCustomApi.args = {
+  ownerAddress: 'daocity.eth',
+  apiUrl: 'http://opensea-api-proxy.vercel.app',
+  isProxyApi: true,
+  darkMode: true,
+} as NftGalleryProps;
+
 export const NoLightbox = Template.bind({});
 NoLightbox.args = { hasLightbox: false } as NftGalleryProps;
 

@@ -15,6 +15,9 @@ import './styles/tailwind.css';
 import { SkeletonCard } from './components/SkeletonCard';
 import { useLightboxNavigation } from './hooks/useLightboxNavigation';
 
+export interface ErrorPopupProps {
+  onClick: () => void;
+}
 export interface NftGalleryProps {
   /**
    * Ethereum address (`0x...`) or ENS domain (`vitalik.eth`) for which the gallery should contain associated NFTs.
@@ -27,6 +30,16 @@ export interface NftGalleryProps {
    * See the endpoint's documentation for more information: https://docs.opensea.io/reference/getting-assets
    */
   openseaApiKey?: string;
+
+  /**
+   * Set true when using an proxy API which is used to hide API key. Otherwise component disables pagination when no API key provided.
+   */
+  isProxyApi?: boolean;
+
+  /**
+   * Set custom API URL.
+   */
+  apiUrl?: string;
 
   /**
    * Display asset metadata underneath the NFT.
@@ -101,6 +114,8 @@ export interface NftGalleryProps {
 export const NftGallery: React.FC<NftGalleryProps> = ({
   ownerAddress = '',
   openseaApiKey = '',
+  isProxyApi = false,
+  apiUrl = '',
   darkMode = false,
   metadataIsVisible = true,
   showcaseMode = false,
@@ -115,7 +130,8 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 }) => {
   const [assets, setAssets] = useState([] as OpenseaAsset[]);
   const [showcaseAssets, setShowcaseAssets] = useState([] as OpenseaAsset[]);
-  const [currentOffset, setCurrentOffset] = useState(0);
+  const [currentCursor, setCurrentCursor] = useState('');
+  const [nextCursor, setNextCursor] = useState('');
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -131,53 +147,58 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const loadAssets = async (
     ownerAddress: NftGalleryProps['ownerAddress'],
     apiKey: NftGalleryProps['openseaApiKey'],
-    offset: number
+    isProxyApi: NftGalleryProps['isProxyApi'],
+    apiUrl: NftGalleryProps['apiUrl'],
+    cursor?: string
   ) => {
     setIsLoading(true);
     const owner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
-    const rawAssets = await fetchOpenseaAssets({
+    const { assets: rawAssets, nextCursor } = await fetchOpenseaAssets({
       owner,
       apiKey,
-      offset,
+      isProxyApi,
+      apiUrl,
+      cursor,
     });
     setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
     setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
+    setNextCursor(nextCursor);
     setIsLoading(false);
   };
 
   const loadShowcaseAssets = async (
     ownerAddress: NftGalleryProps['ownerAddress'],
-    apiKey: NftGalleryProps['openseaApiKey']
+    apiKey: NftGalleryProps['openseaApiKey'],
+    isProxyApi: NftGalleryProps['isProxyApi'],
+    apiUrl: NftGalleryProps['apiUrl']
   ) => {
     setIsLoading(true);
-    // Stop if we already have 1000+ items in play.
-    const MAX_OFFSET = OPENSEA_API_OFFSET * 20;
+    // removed max limit check (MAX_OFFSET) since it is not a case ATM.
     const owner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
 
     let shouldFetch = true;
-    let currentOffset = 0;
+    let currentCursor = '';
 
     // Grab all assets of this address to filter down to showcase-only.
     // TODO: optimise this to exit as soon as all showcase items have been resolved.
     while (shouldFetch) {
-      const rawAssets = await fetchOpenseaAssets({
+      const response = await fetchOpenseaAssets({
         owner,
         apiKey,
-        offset: currentOffset,
+        isProxyApi,
+        apiUrl,
+        cursor: currentCursor,
       });
+      const { assets: rawAssets, nextCursor } = response;
       setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
-      currentOffset += OPENSEA_API_OFFSET;
       if (rawAssets.length !== 0) setIsLoading(false);
-
+      setNextCursor(nextCursor);
       // Terminate if hit the global limit or we hit a non-full page (i.e. end of assets).
-      if (
-        rawAssets.length < OPENSEA_API_OFFSET ||
-        currentOffset >= MAX_OFFSET
-      ) {
+      if (rawAssets.length < OPENSEA_API_OFFSET) {
         shouldFetch = false;
         setIsLoading(false);
       }
@@ -196,7 +217,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   const onLastItemInView = (isInView: boolean) => {
     if (!hasLoadMoreButton && isInView) {
-      setCurrentOffset((prevOffset) => prevOffset + OPENSEA_API_OFFSET);
+      setCurrentCursor(nextCursor);
     }
   };
 
@@ -225,11 +246,24 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   // Handles fetching of assets via OpenSea API.
   useEffect(() => {
     if (showcaseMode) {
-      loadShowcaseAssets(ownerAddress, openseaApiKey);
+      loadShowcaseAssets(ownerAddress, openseaApiKey, isProxyApi, apiUrl);
     } else {
-      loadAssets(ownerAddress, openseaApiKey, currentOffset);
+      loadAssets(
+        ownerAddress,
+        openseaApiKey,
+        isProxyApi,
+        apiUrl,
+        currentCursor
+      );
     }
-  }, [showcaseMode, ownerAddress, openseaApiKey, currentOffset]);
+  }, [
+    showcaseMode,
+    ownerAddress,
+    openseaApiKey,
+    isProxyApi,
+    apiUrl,
+    currentCursor,
+  ]);
 
   // Isolates assets specified for showcase mode into their own collection whenever `assets` changes.
   useEffect(() => {
@@ -312,9 +346,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
           {hasLoadMoreButton && canLoadMore && (
             <LoadMoreButton
               onClick={() => {
-                setCurrentOffset(
-                  (prevOffset) => prevOffset + OPENSEA_API_OFFSET
-                );
+                setCurrentCursor(nextCursor);
               }}
             />
           )}

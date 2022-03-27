@@ -74,6 +74,24 @@ import { NftGallery } from 'react-nft-gallery';
 return <NftGallery ownerAddress="vitalik.eth" />;
 ```
 
+To use a custom API endpoint pass `apiUrl`
+
+If the endpoint injects API key to hide it in client, set `isProxyApi` to `true`
+
+```tsx
+import { NftGallery } from 'react-nft-gallery';
+
+// ...
+
+return (
+  <NftGallery
+    ownerAddress="daocity.eth"
+    apiUrl="http://opensea-api-proxy.vercel.app"
+    isProxyApi={true}
+  />
+);
+```
+
 ## API
 
 ````ts
@@ -89,6 +107,16 @@ interface NftGalleryProps {
    * See the endpoint's documentation for more information: https://docs.opensea.io/reference/getting-assets
    */
   openseaApiKey?: string;
+
+  /**
+   * Set true when using an proxy API which is used to hide API key. Otherwise component disables pagination when no API key provided.
+   */
+  isProxyApi?: boolean;
+
+  /**
+   * Set custom API URL.
+   */
+  apiUrl?: string;
 
   /**
    * Display asset metadata underneath the NFT.

@@ -153,6 +153,10 @@ interface LastSale {
   quantity: string;
 }
 
+export interface OpenseaAssetsAndNextCursor {
+  assets: OpenseaAsset[];
+  nextCursor: string;
+}
 export interface OpenseaAsset {
   id: number;
   token_id: string;
