@@ -72,12 +72,14 @@ export const fetchOpenseaAssets = async ({
     return {
       assets,
       nextCursor,
+      hasError: false,
     };
   } catch (error) {
     console.error('fetchAssets failed:', error);
     return {
       assets: [],
       nextCursor: '',
+      hasError: true,
     };
   }
 };

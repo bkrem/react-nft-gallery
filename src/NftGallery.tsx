@@ -3,6 +3,7 @@ import InView from 'react-intersection-observer';
 
 import { GalleryItem } from './components/GalleryItem/GalleryItem';
 import { LoadMoreButton } from './components/LoadMoreButton';
+import { RetryButton } from './components/RetryButton';
 import { OpenseaAsset } from './types/OpenseaAsset';
 import { isEnsDomain, joinClassNames } from './utils';
 import {
@@ -132,6 +133,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   const [showcaseAssets, setShowcaseAssets] = useState([] as OpenseaAsset[]);
   const [currentCursor, setCurrentCursor] = useState('');
   const [nextCursor, setNextCursor] = useState('');
+  const [hasError, setHasError] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -155,16 +157,25 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     const owner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
-    const { assets: rawAssets, nextCursor } = await fetchOpenseaAssets({
+    const {
+      assets: rawAssets,
+      hasError,
+      nextCursor,
+    } = await fetchOpenseaAssets({
       owner,
       apiKey,
       isProxyApi,
       apiUrl,
       cursor,
     });
-    setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
-    setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
-    setNextCursor(nextCursor);
+    if (hasError) {
+      setHasError(true);
+    } else {
+      setHasError(false);
+      setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
+      setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
+      setNextCursor(nextCursor);
+    }
     setIsLoading(false);
   };
 
@@ -193,14 +204,19 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
         apiUrl,
         cursor: currentCursor,
       });
-      const { assets: rawAssets, nextCursor } = response;
-      setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
-      if (rawAssets.length !== 0) setIsLoading(false);
-      setNextCursor(nextCursor);
-      // Terminate if hit the global limit or we hit a non-full page (i.e. end of assets).
-      if (rawAssets.length < OPENSEA_API_OFFSET) {
-        shouldFetch = false;
-        setIsLoading(false);
+      const { assets: rawAssets, hasError, nextCursor } = response;
+      if (hasError) {
+        setHasError(true);
+      } else {
+        setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
+        if (rawAssets.length !== 0) setIsLoading(false);
+        setNextCursor(nextCursor);
+        setHasError(hasError);
+        // Terminate if hit the global limit or we hit a non-full page (i.e. end of assets).
+        if (rawAssets.length < OPENSEA_API_OFFSET) {
+          shouldFetch = false;
+          setIsLoading(false);
+        }
       }
     }
   };
@@ -285,10 +301,14 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       .fill(0)
       .map((_, index) => <SkeletonCard key={'placeholder-' + index} />);
 
+  const retryLastRequest = () =>
+    loadAssets(ownerAddress, openseaApiKey, isProxyApi, apiUrl, nextCursor);
+
   return (
     <div
       className={joinClassNames(darkMode ? 'rnftg-dark' : '', 'rnftg-h-full')}
     >
+      {hasError && <RetryButton onClick={retryLastRequest} />}
       <div
         style={galleryContainerStyle}
         className={joinClassNames(
