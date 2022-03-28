@@ -330,7 +330,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   return (
     <div
-      className={joinClassNames(darkMode ? 'rnftg-dark' : '', 'rnftg-h-full')}
+      className={joinClassNames(
+        darkMode ? 'rnftg-dark' : '',
+        'rnftg-h-full rnftg-w-full'
+      )}
     >
       {hasError && <RetryButton onClick={retryLastRequest} />}
       <div
