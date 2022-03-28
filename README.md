@@ -119,6 +119,11 @@ interface NftGalleryProps {
   apiUrl?: string;
 
   /**
+   * Auto retry when API request failed.
+   */
+  autoRetry?: boolean;
+
+  /**
    * Display asset metadata underneath the NFT.
    * Defaults to `true`.
    */

@@ -3,6 +3,7 @@ import { OpenseaAssetsAndNextCursor } from './types/OpenseaAsset';
 export const OPENSEA_API_OFFSET = 50;
 const OPENSEA_URL = 'https://api.opensea.io';
 const ENS_GRAPH_URL = 'https://api.thegraph.com/subgraphs/name/ensdomains/ens';
+const AUTO_RETRY_ATTEMPT_INTERVAL = 1600;
 
 export const resolveEnsDomain = async (
   ensDomainName: string
@@ -34,18 +35,28 @@ export const resolveEnsDomain = async (
   }
 };
 
+const delay = (
+  fn: OpenseaAssetsAndNextCursor | PromiseLike<OpenseaAssetsAndNextCursor>
+): Promise<OpenseaAssetsAndNextCursor> => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(fn), AUTO_RETRY_ATTEMPT_INTERVAL);
+  });
+};
+
 export const fetchOpenseaAssets = async ({
   owner,
   cursor,
   apiKey,
   isProxyApi,
   apiUrl,
+  autoRetry,
 }: {
   owner: string | null;
   cursor?: string;
   apiKey?: string;
   isProxyApi?: boolean;
   apiUrl?: string;
+  autoRetry?: boolean;
 }): Promise<OpenseaAssetsAndNextCursor> => {
   try {
     const apiUrlFinal =
@@ -75,11 +86,25 @@ export const fetchOpenseaAssets = async ({
       hasError: false,
     };
   } catch (error) {
-    console.error('fetchAssets failed:', error);
-    return {
-      assets: [],
-      nextCursor: '',
-      hasError: true,
-    };
+    if (autoRetry) {
+      console.log(`Retrying in ${AUTO_RETRY_ATTEMPT_INTERVAL} ms...`);
+      return delay(
+        fetchOpenseaAssets({
+          owner,
+          cursor,
+          apiKey,
+          isProxyApi,
+          apiUrl,
+          autoRetry,
+        })
+      );
+    } else {
+      console.error('fetchAssets failed:', error);
+      return {
+        assets: [],
+        nextCursor: '',
+        hasError: true,
+      };
+    }
   }
 };

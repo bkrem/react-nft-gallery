@@ -35,6 +35,7 @@ CityDAOCustomApi.args = {
   apiUrl: 'http://opensea-api-proxy.vercel.app',
   isProxyApi: true,
   darkMode: true,
+  autoRetry: true,
 } as NftGalleryProps;
 
 export const NoLightbox = Template.bind({});

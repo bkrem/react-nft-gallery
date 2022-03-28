@@ -43,6 +43,11 @@ export interface NftGalleryProps {
   apiUrl?: string;
 
   /**
+   * Auto retry (10 times by default) after a request failed.
+   */
+  autoRetry?: boolean;
+
+  /**
    * Display asset metadata underneath the NFT.
    * Defaults to `true`.
    */
@@ -117,6 +122,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   openseaApiKey = '',
   isProxyApi = false,
   apiUrl = '',
+  autoRetry = false,
   darkMode = false,
   metadataIsVisible = true,
   showcaseMode = false,
@@ -151,6 +157,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     apiKey: NftGalleryProps['openseaApiKey'],
     isProxyApi: NftGalleryProps['isProxyApi'],
     apiUrl: NftGalleryProps['apiUrl'],
+    autoRetry: NftGalleryProps['autoRetry'],
     cursor?: string
   ) => {
     setIsLoading(true);
@@ -166,6 +173,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       apiKey,
       isProxyApi,
       apiUrl,
+      autoRetry,
       cursor,
     });
     if (hasError) {
@@ -183,7 +191,8 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     ownerAddress: NftGalleryProps['ownerAddress'],
     apiKey: NftGalleryProps['openseaApiKey'],
     isProxyApi: NftGalleryProps['isProxyApi'],
-    apiUrl: NftGalleryProps['apiUrl']
+    apiUrl: NftGalleryProps['apiUrl'],
+    autoRetry: NftGalleryProps['autoRetry']
   ) => {
     setIsLoading(true);
     // removed max limit check (MAX_OFFSET) since it is not a case ATM.
@@ -202,6 +211,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
         apiKey,
         isProxyApi,
         apiUrl,
+        autoRetry,
         cursor: currentCursor,
       });
       const { assets: rawAssets, hasError, nextCursor } = response;
@@ -262,13 +272,20 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
   // Handles fetching of assets via OpenSea API.
   useEffect(() => {
     if (showcaseMode) {
-      loadShowcaseAssets(ownerAddress, openseaApiKey, isProxyApi, apiUrl);
+      loadShowcaseAssets(
+        ownerAddress,
+        openseaApiKey,
+        isProxyApi,
+        apiUrl,
+        autoRetry
+      );
     } else {
       loadAssets(
         ownerAddress,
         openseaApiKey,
         isProxyApi,
         apiUrl,
+        autoRetry,
         currentCursor
       );
     }
@@ -302,7 +319,14 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       .map((_, index) => <SkeletonCard key={'placeholder-' + index} />);
 
   const retryLastRequest = () =>
-    loadAssets(ownerAddress, openseaApiKey, isProxyApi, apiUrl, nextCursor);
+    loadAssets(
+      ownerAddress,
+      openseaApiKey,
+      isProxyApi,
+      apiUrl,
+      autoRetry,
+      nextCursor
+    );
 
   return (
     <div
