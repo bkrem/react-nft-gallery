@@ -137,6 +137,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 }) => {
   const [assets, setAssets] = useState([] as OpenseaAsset[]);
   const [showcaseAssets, setShowcaseAssets] = useState([] as OpenseaAsset[]);
+  const [currentOffset, setCurrentOffset] = useState(0);
   const [currentCursor, setCurrentCursor] = useState('');
   const [nextCursor, setNextCursor] = useState('');
   const [hasError, setHasError] = useState(false);
@@ -181,6 +182,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     } else {
       setHasError(false);
       setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
+      setCurrentOffset((prevOffset) => prevOffset++);
       setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
       setNextCursor(nextCursor);
     }
@@ -195,7 +197,8 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     autoRetry: NftGalleryProps['autoRetry']
   ) => {
     setIsLoading(true);
-    // removed max limit check (MAX_OFFSET) since it is not a case ATM.
+    // Stop if we already have 1000+ items in play.
+    const MAX_OFFSET = OPENSEA_API_OFFSET * 20;
     const owner = isEnsDomain(ownerAddress)
       ? await resolveEnsDomain(ownerAddress)
       : ownerAddress;
@@ -223,7 +226,10 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
         setNextCursor(nextCursor);
         setHasError(hasError);
         // Terminate if hit the global limit or we hit a non-full page (i.e. end of assets).
-        if (rawAssets.length < OPENSEA_API_OFFSET) {
+        if (
+          rawAssets.length < OPENSEA_API_OFFSET ||
+          currentOffset >= MAX_OFFSET
+        ) {
           shouldFetch = false;
           setIsLoading(false);
         }
