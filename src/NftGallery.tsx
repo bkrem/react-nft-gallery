@@ -137,7 +137,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 }) => {
   const [assets, setAssets] = useState([] as OpenseaAsset[]);
   const [showcaseAssets, setShowcaseAssets] = useState([] as OpenseaAsset[]);
-  const [currentOffset, setCurrentOffset] = useState(0);
   const [currentCursor, setCurrentCursor] = useState('');
   const [nextCursor, setNextCursor] = useState('');
   const [hasError, setHasError] = useState(false);
@@ -159,7 +158,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     isProxyApi: NftGalleryProps['isProxyApi'],
     apiUrl: NftGalleryProps['apiUrl'],
     autoRetry: NftGalleryProps['autoRetry'],
-    cursor?: string
+    cursor: string
   ) => {
     setIsLoading(true);
     const owner = isEnsDomain(ownerAddress)
@@ -182,7 +181,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     } else {
       setHasError(false);
       setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
-      setCurrentOffset((prevOffset) => prevOffset++);
       setCanLoadMore(rawAssets.length === OPENSEA_API_OFFSET);
       setNextCursor(nextCursor);
     }
@@ -204,7 +202,8 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       : ownerAddress;
 
     let shouldFetch = true;
-    let currentCursor = '';
+    let currentOffset = 0;
+    let cursor = '';
 
     // Grab all assets of this address to filter down to showcase-only.
     // TODO: optimise this to exit as soon as all showcase items have been resolved.
@@ -215,21 +214,20 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
         isProxyApi,
         apiUrl,
         autoRetry,
-        cursor: currentCursor,
+        cursor,
       });
       const { assets: rawAssets, hasError, nextCursor } = response;
       if (hasError) {
         setHasError(true);
       } else {
+        currentOffset += OPENSEA_API_OFFSET;
+        cursor = nextCursor;
         setAssets((prevAssets) => [...prevAssets, ...rawAssets]);
         if (rawAssets.length !== 0) setIsLoading(false);
         setNextCursor(nextCursor);
         setHasError(hasError);
-        // Terminate if hit the global limit or we hit a non-full page (i.e. end of assets).
-        if (
-          rawAssets.length < OPENSEA_API_OFFSET ||
-          currentOffset >= MAX_OFFSET
-        ) {
+        // Terminate if next cursor is `null` (i.e. last page) or we hit the asset limit.
+        if (cursor === null || currentOffset >= MAX_OFFSET) {
           shouldFetch = false;
           setIsLoading(false);
         }
@@ -301,6 +299,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     openseaApiKey,
     isProxyApi,
     apiUrl,
+    autoRetry,
     currentCursor,
   ]);
 
