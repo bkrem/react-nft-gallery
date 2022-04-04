@@ -3,7 +3,7 @@ import { OpenseaAssetsAndNextCursor } from './types/OpenseaAsset';
 export const OPENSEA_API_OFFSET = 50;
 const OPENSEA_URL = 'https://api.opensea.io';
 const ENS_GRAPH_URL = 'https://api.thegraph.com/subgraphs/name/ensdomains/ens';
-const MAX_AUTO_RETRY_ATTEMPT = 20;
+const MAX_AUTO_RETRY_ATTEMPT = 10;
 const AUTO_RETRY_ATTEMPT_INTERVAL = 2100;
 
 let retryCount = 0;
