@@ -119,7 +119,7 @@ interface NftGalleryProps {
   apiUrl?: string;
 
   /**
-   * Auto retry when API request failed.
+   * Auto retry (10 times by default) after an API request failed.
    */
   autoRetry?: boolean;
 
