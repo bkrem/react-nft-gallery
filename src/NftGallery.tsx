@@ -301,6 +301,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     openseaApiKey,
     isProxyApi,
     apiUrl,
+    autoRetry,
     currentCursor,
   ]);
 
