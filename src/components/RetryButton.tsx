@@ -11,7 +11,7 @@ export const RetryButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
         )}
         onClick={onClick}
       >
-        Couldn't fetch data. Please click to Retry
+        Couldn't fetch assets. Please click to retry.
       </button>
     </div>
   );
