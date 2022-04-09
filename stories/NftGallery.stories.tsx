@@ -32,7 +32,7 @@ VitalikENS.args = {
 export const CityDAOCustomApi = Template.bind({});
 CityDAOCustomApi.args = {
   ownerAddress: 'daocity.eth',
-  apiUrl: 'http://opensea-api-proxy.vercel.app',
+  apiUrl: 'https://opensea-api-proxy.vercel.app',
   isProxyApi: true,
   darkMode: true,
   autoRetry: true,
@@ -47,7 +47,7 @@ Inline.args = { isInline: true } as NftGalleryProps;
 export const ThreeArrowsCapitalShowAll = Template.bind({});
 ThreeArrowsCapitalShowAll.args = {
   ownerAddress: '0x2e675eeae4747c248bfddbafaa3a8a2fdddaa44b',
-  apiUrl: 'http://opensea-api-proxy.vercel.app',
+  apiUrl: 'https://opensea-api-proxy.vercel.app',
   isProxyApi: true,
   darkMode: true,
 } as NftGalleryProps;
