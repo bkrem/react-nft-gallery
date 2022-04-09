@@ -4,9 +4,10 @@ export const OPENSEA_API_OFFSET = 50;
 const OPENSEA_URL = 'https://api.opensea.io';
 const ENS_GRAPH_URL = 'https://api.thegraph.com/subgraphs/name/ensdomains/ens';
 const MAX_AUTO_RETRY_ATTEMPT = 10;
-const AUTO_RETRY_ATTEMPT_INTERVAL = 2100;
+const AUTO_RETRY_ATTEMPT_INTERVAL = 2000;
 
-let retryCount = 0;
+let requestRetryCount = 0;
+
 export const resolveEnsDomain = async (
   ensDomainName: string
 ): Promise<string | null> => {
@@ -38,10 +39,10 @@ export const resolveEnsDomain = async (
 };
 
 const delay = (
-  fn: OpenseaAssetsAndNextCursor | PromiseLike<OpenseaAssetsAndNextCursor>
+  fn: () => OpenseaAssetsAndNextCursor | PromiseLike<OpenseaAssetsAndNextCursor>
 ): Promise<OpenseaAssetsAndNextCursor> => {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(fn), AUTO_RETRY_ATTEMPT_INTERVAL);
+    setTimeout(() => resolve(fn()), AUTO_RETRY_ATTEMPT_INTERVAL);
   });
 };
 
@@ -88,13 +89,19 @@ export const fetchOpenseaAssets = async ({
       hasError: false,
     };
   } catch (error) {
-    if (autoRetry && retryCount < MAX_AUTO_RETRY_ATTEMPT) {
+    if (autoRetry && requestRetryCount < MAX_AUTO_RETRY_ATTEMPT) {
       console.log(
-        `Retrying in ${AUTO_RETRY_ATTEMPT_INTERVAL} ms. Retry Count: ${retryCount}`
+        `Failed to fetch assets, retrying in ${
+          AUTO_RETRY_ATTEMPT_INTERVAL / 1000
+        } seconds...`
+      );
+      console.log(
+        `Retry Count: ${requestRetryCount}/${MAX_AUTO_RETRY_ATTEMPT}`
       );
 
-      retryCount++;
-      return delay(
+      requestRetryCount++;
+
+      return delay(() =>
         fetchOpenseaAssets({
           owner,
           cursor,
