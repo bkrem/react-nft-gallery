@@ -16,9 +16,6 @@ import './styles/tailwind.css';
 import { SkeletonCard } from './components/SkeletonCard';
 import { useLightboxNavigation } from './hooks/useLightboxNavigation';
 
-export interface ErrorPopupProps {
-  onClick: () => void;
-}
 export interface NftGalleryProps {
   /**
    * Ethereum address (`0x...`) or ENS domain (`vitalik.eth`) for which the gallery should contain associated NFTs.
