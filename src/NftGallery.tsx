@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState, useCallback } from 'react';
 import InView from 'react-intersection-observer';
 
 import { GalleryItem } from './components/GalleryItem/GalleryItem';
@@ -152,7 +152,7 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   const displayedAssets = showcaseMode ? showcaseAssets : assets;
 
-  const loadAssets = async (
+  const loadAssetsPage = async (
     ownerAddress: NftGalleryProps['ownerAddress'],
     apiKey: NftGalleryProps['openseaApiKey'],
     isProxyApi: NftGalleryProps['isProxyApi'],
@@ -235,6 +235,35 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     }
   };
 
+  const loadAssets = useCallback(() => {
+    if (showcaseMode) {
+      loadShowcaseAssets(
+        ownerAddress,
+        openseaApiKey,
+        isProxyApi,
+        apiUrl,
+        autoRetry
+      );
+    } else {
+      loadAssetsPage(
+        ownerAddress,
+        openseaApiKey,
+        isProxyApi,
+        apiUrl,
+        autoRetry,
+        currentCursor
+      );
+    }
+  }, [
+    showcaseMode,
+    ownerAddress,
+    openseaApiKey,
+    isProxyApi,
+    apiUrl,
+    autoRetry,
+    currentCursor,
+  ]);
+
   const updateShowcaseAssets = (
     allAssets: OpenseaAsset[],
     itemIds: string[]
@@ -250,6 +279,16 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
       setCurrentCursor(nextCursor);
     }
   };
+
+  const retryLastRequest = () =>
+    loadAssetsPage(
+      ownerAddress,
+      openseaApiKey,
+      isProxyApi,
+      apiUrl,
+      autoRetry,
+      nextCursor ?? currentCursor
+    );
 
   // TODO: Move into `Lightbox` component once its refactored to being a singleton.
   const handleKeydownEvent = (evt: KeyboardEvent) => {
@@ -275,33 +314,8 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
 
   // Handles fetching of assets via OpenSea API.
   useEffect(() => {
-    if (showcaseMode) {
-      loadShowcaseAssets(
-        ownerAddress,
-        openseaApiKey,
-        isProxyApi,
-        apiUrl,
-        autoRetry
-      );
-    } else {
-      loadAssets(
-        ownerAddress,
-        openseaApiKey,
-        isProxyApi,
-        apiUrl,
-        autoRetry,
-        currentCursor
-      );
-    }
-  }, [
-    showcaseMode,
-    ownerAddress,
-    openseaApiKey,
-    isProxyApi,
-    apiUrl,
-    autoRetry,
-    currentCursor,
-  ]);
+    loadAssets();
+  }, [loadAssets]);
 
   // Isolates assets specified for showcase mode into their own collection whenever `assets` changes.
   useEffect(() => {
@@ -322,16 +336,6 @@ export const NftGallery: React.FC<NftGalleryProps> = ({
     new Array(8)
       .fill(0)
       .map((_, index) => <SkeletonCard key={'placeholder-' + index} />);
-
-  const retryLastRequest = () =>
-    loadAssets(
-      ownerAddress,
-      openseaApiKey,
-      isProxyApi,
-      apiUrl,
-      autoRetry,
-      nextCursor
-    );
 
   return (
     <div
